@@ -25,6 +25,7 @@
     </style>
     <style name="myBackround">
         <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="myText">
         <item name="android:textColor">@color/black</item>
