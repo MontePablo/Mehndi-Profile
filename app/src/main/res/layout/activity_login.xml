@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            style="@style/myTextReverse"
+            style="@style/myText2"
             android:text="Login"
             android:layout_marginBottom="20dp"
             android:textAlignment="center"
@@ -75,7 +75,7 @@
 
         <CheckBox
             android:textSize="13sp"
-            style="@style/myTextReverse"
+            style="@style/myText2"
             android:text="Remember Password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="40dp"/>
         <TextView
-            style="@style/myTextReverse"
+            style="@style/myText2"
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/forget_password"
             android:layout_width="wrap_content"
