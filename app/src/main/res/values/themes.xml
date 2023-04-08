@@ -18,33 +18,43 @@
     </style>
     
     <style name="myButton">
-        <item name="android:foreground">@drawable/foreground_click_effect</item>
-        <item name="android:backgroundTint">@color/ten1</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:foreground">@drawable/foreground_click_effect_crner20dp</item>
+        <item name="android:backgroundTint">@color/thirty1</item>
+        <item name="android:textColor">@color/thirty11</item>
         <item name="android:background">@drawable/shape_corner20dp</item>
     </style>
     <style name="myBackround">
-        <item name="android:background">@color/white</item>
-        <item name="android:backgroundTint">@color/white</item>
-    </style>
-    <style name="myText">
-        <item name="android:textColor">@color/black</item>
-    </style>
-    <style name="myText2">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/sixty1</item>
+        <item name="android:backgroundTint">@color/sixty1</item>
     </style>
     <style name="myBackround2">
-        <item name="android:background">@color/sixty5</item>
-        <item name="android:backgroundTint">@color/sixty5</item>
+        <item name="android:background">@color/thirty11</item>
+        <item name="android:backgroundTint">@color/thirty11</item>
+    </style>
+    <style name="myText1">
+        <item name="android:textColor">@color/thirty1</item>
+    </style>
+    <style name="myText2">
+        <item name="android:textColor">@color/ten1</item>
+    </style>
+    <style name="myText3">
+        <item name="android:textColor">@color/thirty11</item>
+    </style>
+    <style name="myText4">
+        <item name="android:textColor">@color/black</item>
     </style>
     <style name="myEdittext">
-        <item name="android:textColorHint">@color/thirty5</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColorHint">@color/ten1</item>
+        <item name="android:textColor">@color/thirty1</item>
+        <item name="backgroundTint">@color/thirty11</item>
         <item name="android:background">@drawable/shape_corner20dp</item>
     </style>
     <style name="myDashboardImage">
         <item name="android:tint">@color/ten1</item>
+    </style>
+    <style name="myDashboard">
+        <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 <!--    <style name="myButton">-->
 
