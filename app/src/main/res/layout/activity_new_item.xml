@@ -33,9 +33,9 @@
                 android:layout_height="wrap_content"
                 android:text="Parent to link with"/>
             <androidx.recyclerview.widget.RecyclerView
-                style="@style/myBackround2"
+                android:id="@+id/recylerView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="170dp"
                 android:layout_margin="10dp"/>
             <TextView
                 android:layout_margin="10dp"
@@ -71,6 +71,28 @@
                 android:id="@+id/quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="item images"/>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/image_layout"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </LinearLayout>
+            </HorizontalScrollView>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/myButton"
+                android:textAllCaps="false"
+                android:text="add image"
+                android:id="@+id/addImage"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
