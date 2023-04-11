@@ -12,6 +12,9 @@
         android:theme="@style/Theme.MehndiInterior"
         tools:targetApi="31">
         <activity
+            android:name=".NewProfile"
+            android:exported="false" />
+        <activity
             android:name=".Items"
             android:exported="false" />
         <activity
