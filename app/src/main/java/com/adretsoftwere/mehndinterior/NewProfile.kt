@@ -14,10 +14,11 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         binding= ActivityNewProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor=getColor(R.color.sixty1)
 
         val list= listOf<String>("Manufacturer","Distributor","Wholesaler","Retailer","Agent")
         val shapeAdapter: ArrayAdapter<*>
-        shapeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
+        shapeAdapter= ArrayAdapter<String>(this,R.drawable.my_dropdown_item,list)
         binding.spinner.adapter=shapeAdapter
         binding.spinner.onItemSelectedListener=this
     }

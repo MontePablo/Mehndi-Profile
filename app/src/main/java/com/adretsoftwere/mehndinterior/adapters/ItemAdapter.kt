@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
 import com.adretsoftwere.mehndinterior.models.Item
@@ -11,8 +12,8 @@ import com.bumptech.glide.Glide
 
 
 class ItemAdapter(listener:itemFunctions): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
-     var listener:itemFunctions
-     lateinit var items:ArrayList<Item>
+    var listener:itemFunctions
+    lateinit var items:ArrayList<Item>
     init {
         this.listener=listener
     }
@@ -35,17 +36,22 @@ class ItemAdapter(listener:itemFunctions): RecyclerView.Adapter<ItemAdapter.View
         holder.name.text=items[position].name
         if(items[position].price.isNullOrEmpty()){
             holder.price.text=""
+            holder.priceUnit.text=""
         }else {
             holder.price.text = items[position].price
         }
+        holder.root.setOnClickListener(View.OnClickListener {
+            listener.itemClick(items[position])
+        })
         Glide.with(holder.itemView.context).load(items[position].imageurl).into(holder.image)
     }
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
         var image=view.findViewById<ImageView>(R.id.item_image)
         var price=view.findViewById<TextView>(R.id.item_price)
+        var priceUnit=view.findViewById<TextView>(R.id.item_price_unit)
         var name=view.findViewById<TextView>(R.id.item_title)
-
+        var root=view.findViewById<ConstraintLayout>(R.id.item_root)
     }
 }
 interface itemFunctions{

@@ -11,6 +11,7 @@ class Item(name:String,imageurl:String,price:String="") {
     init {
         this.name=name
         this.imageurl=imageurl
+        this.price=price
     }
 
 }

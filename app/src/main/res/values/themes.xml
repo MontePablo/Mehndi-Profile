@@ -53,8 +53,8 @@
         <item name="android:tint">@color/ten1</item>
     </style>
     <style name="myDashboard">
-        <item name="android:background">@color/thirty11</item>
-        <item name="android:backgroundTint">@color/thirty11</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 <!--    <style name="myButton">-->
 

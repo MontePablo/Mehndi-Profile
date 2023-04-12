@@ -11,39 +11,22 @@ import com.adretsoftwere.mehndinterior.models.Item
 class Items : AppCompatActivity(),itemFunctions {
     lateinit var binding:ActivityItemsBinding
     lateinit var adapter: ItemAdapter
-    val dataset= arrayListOf<Item>()
-    val dataset2= arrayListOf<Item>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityItemsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor=getColor(R.color.sixty1)
+
         adapter= ItemAdapter(this)
 
-        dataset.add(Item("Lovers Panel","https://i.ibb.co/HNDnTxF/cat1.png",))
-        dataset.add(Item("panel membrane","https://i.ibb.co/HNDnTxF/cat2.png",))
-        dataset.add(Item("pvc laminates","https://i.ibb.co/HNDnTxF/cat3.png",))
-        dataset.add(Item("sheet roler","https://i.ibb.co/HNDnTxF/cat4.png",))
 
-        dataset2.add(Item("Red velvet","https://i.ibb.co/n0B7QLD/a.png","2000.00"))
-        dataset2.add(Item("green velvet","https://i.ibb.co/n0B7QLD/b.png","2000.00"))
-        dataset2.add(Item("white velvet","https://i.ibb.co/n0B7QLD/c.png","2000.00"))
-        dataset2.add(Item("wooden velvet","https://i.ibb.co/n0B7QLD/d.png","2000.00"))
-        dataset2.add(Item("Red velvet","https://i.ibb.co/n0B7QLD/a.png","2000.00"))
-        dataset2.add(Item("green velvet","https://i.ibb.co/n0B7QLD/b.png","2000.00"))
-        dataset2.add(Item("white velvet","https://i.ibb.co/n0B7QLD/c.png","2000.00"))
-        dataset2.add(Item("wooden velvet","https://i.ibb.co/n0B7QLD/d.png","2000.00"))
-        dataset2.add(Item("Red velvet","https://i.ibb.co/n0B7QLD/a.png","2000.00"))
-        dataset2.add(Item("green velvet","https://i.ibb.co/n0B7QLD/b.png","2000.00"))
-        dataset2.add(Item("white velvet","https://i.ibb.co/n0B7QLD/c.png","2000.00"))
-        dataset2.add(Item("wooden velvet","https://i.ibb.co/n0B7QLD/d.png","2000.00"))
-
-        adapter.update(dataset)
+        adapter.update(FakeData.dataset)
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false)
 
     }
 
     override fun itemClick(item: Item) {
-        adapter.update(dataset2)
+        adapter.update(FakeData.dataset2)
     }
 }
