@@ -64,12 +64,23 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner"/>
+                android:id="@+id/spinner_account_type"/>
             <TextView
                 android:layout_margin="10dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Parent account"/>
+
+            <TextView
+                style="@style/myEdittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/search_user_text"
+                android:hint="Select parent to link with"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:drawableEnd="@drawable/arrow_down_logo"
+                />
         </LinearLayout>
     </ScrollView>
 

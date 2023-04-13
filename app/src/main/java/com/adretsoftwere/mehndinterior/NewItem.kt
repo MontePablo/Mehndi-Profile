@@ -70,7 +70,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
-                imageBinding?.imageview?.setImageURI(imageUri)
+            imageBinding?.imageview?.setImageURI(imageUri)
             imageBinding?.storeUri?.text = imageUri.toString()
             imageBinding?.insert?.visibility=View.GONE
 //            CoroutineScope(Dispatchers.Default).launch {
