@@ -255,6 +255,36 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/manage_users"
+            android:layout_margin="15dp"
+            app:cardElevation="15dp"
+            app:cardCornerRadius="10sp"
+            android:layout_rowWeight="1"
+            style="@style/myDashboard"
+            android:layout_columnWeight="1">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="center_vertical|center_horizontal">
+                <ImageView
+                    android:src="@drawable/users_logo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    style="@style/myDashboardImage" />
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    style="@style/myText2"
+                    android:text="Manage Users"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

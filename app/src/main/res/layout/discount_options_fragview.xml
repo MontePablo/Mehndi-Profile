@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    style="@style/myBackround"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:hint="enter amount"
+            android:id="@+id/amount"
+            android:layout_margin="10dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            style="@style/myEdittext"/>
+        <Button
+            android:layout_margin="10dp"
+            android:text="save"
+            android:id="@+id/save"
+            style="@style/myButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <Button
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="goto Sub-Items"
+        style="@style/myButton"
+        android:id="@+id/sub_items"/>
+
+</LinearLayout>

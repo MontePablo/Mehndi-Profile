@@ -17,7 +17,7 @@ class Items : AppCompatActivity(),itemFunctions {
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= ItemAdapter(this)
+        adapter= ItemAdapter(this,"surf")
 
 
         adapter.update(FakeData.dataset)
@@ -28,5 +28,8 @@ class Items : AppCompatActivity(),itemFunctions {
 
     override fun itemClick(item: Item) {
         adapter.update(FakeData.dataset2)
+    }
+
+    override fun openDiscountFunc(item: Item) {
     }
 }

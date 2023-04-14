@@ -11,11 +11,13 @@ import com.adretsoftwere.mehndinterior.models.Item
 import com.bumptech.glide.Glide
 
 
-class ItemAdapter(listener:itemFunctions): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     var listener:itemFunctions
     lateinit var items:ArrayList<Item>
+    var z=""
     init {
         this.listener=listener
+        this.z=z
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,7 +43,12 @@ class ItemAdapter(listener:itemFunctions): RecyclerView.Adapter<ItemAdapter.View
             holder.price.text = items[position].price
         }
         holder.root.setOnClickListener(View.OnClickListener {
-            listener.itemClick(items[position])
+            if(z=="surf") {
+                listener.itemClick(items[position])
+            }else if(z=="discount"){
+                //            holder.root.isPressed=true
+                listener.openDiscountFunc(items[position])
+            }
         })
         Glide.with(holder.itemView.context).load(items[position].imageurl).into(holder.image)
     }
@@ -56,4 +63,6 @@ class ItemAdapter(listener:itemFunctions): RecyclerView.Adapter<ItemAdapter.View
 }
 interface itemFunctions{
     fun itemClick(item:Item)
+    fun openDiscountFunc(item:Item)
+
 }

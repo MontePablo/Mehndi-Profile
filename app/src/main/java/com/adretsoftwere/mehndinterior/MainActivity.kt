@@ -19,5 +19,8 @@ class MainActivity : AppCompatActivity() {
         binding.newItem.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext, NewItem::class.java))
         })
+        binding.manageUsers.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(applicationContext,Users::class.java))
+        })
     }
 }
