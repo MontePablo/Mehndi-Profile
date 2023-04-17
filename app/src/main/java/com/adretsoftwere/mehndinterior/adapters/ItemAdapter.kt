@@ -12,6 +12,11 @@ import com.bumptech.glide.Glide
 
 
 class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+    companion object{
+        val SURF="1"
+        val DISCOUNT="2"
+    }
+
     var listener:itemFunctions
     lateinit var items:ArrayList<Item>
     var z=""
@@ -43,9 +48,9 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
             holder.price.text = items[position].price
         }
         holder.root.setOnClickListener(View.OnClickListener {
-            if(z=="surf") {
-                listener.itemClick(items[position])
-            }else if(z=="discount"){
+            if(z==SURF) {
+                listener.ItemClickFunc(items[position])
+            }else if(z== DISCOUNT){
                 //            holder.root.isPressed=true
                 listener.openDiscountFunc(items[position])
             }
@@ -62,7 +67,7 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
     }
 }
 interface itemFunctions{
-    fun itemClick(item:Item)
+    fun ItemClickFunc(item:Item)
     fun openDiscountFunc(item:Item)
 
 }

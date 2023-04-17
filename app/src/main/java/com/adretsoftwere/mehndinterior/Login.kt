@@ -18,7 +18,6 @@ class Login : AppCompatActivity() {
             startActivity(Intent(applicationContext, MainActivity::class.java))
         })
         binding.signUp.setOnClickListener(View.OnClickListener {
-            AdminCodeDialog.process(this,layoutInflater)
         })
     }
 }

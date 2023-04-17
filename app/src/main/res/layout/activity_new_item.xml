@@ -37,6 +37,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:layout_margin="10dp"/>
+            <LinearLayout
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/myText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Linked parent"/>
+                <TextView
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    style="@style/myText1"/>
+            </LinearLayout>
             <TextView
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"

@@ -1,13 +1,18 @@
 package com.adretsoftwere.mehndinterior
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.UserAdapter
 import com.adretsoftwere.mehndinterior.adapters.userFunctions
 import com.adretsoftwere.mehndinterior.databinding.ActivityUsersBinding
+import com.adretsoftwere.mehndinterior.databinding.DiscountOptionsFragviewBinding
+import com.adretsoftwere.mehndinterior.databinding.UserOptionsFragviewBinding
 import com.adretsoftwere.mehndinterior.models.User
 
 class Users : AppCompatActivity(),userFunctions {
@@ -27,7 +32,17 @@ class Users : AppCompatActivity(),userFunctions {
     }
 
     override fun itemClick(user: User) {
-//        adapter.update()
+        val dialogBuilder= AlertDialog.Builder(this)
+        val viewBinding= UserOptionsFragviewBinding.inflate(layoutInflater)
+        dialogBuilder.setView(viewBinding.root)
+        val dialog=dialogBuilder.create()
+        dialog.show()
+        viewBinding.setDiscount.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(applicationContext,DiscountsManage::class.java))
+        })
+        viewBinding.updatePersonalData.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(applicationContext,NewProfile::class.java))
+        })
     }
 
 }

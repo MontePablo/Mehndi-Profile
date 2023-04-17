@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/myBackround"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ItemDetail">
+    <com.smarteist.autoimageslider.SliderView
+        android:id="@+id/sliderView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sliderAnimationDuration="600"
+        app:sliderAutoCycleDirection="back_and_forth"
+        app:sliderAutoCycleEnabled="true"
+        app:sliderIndicatorAnimationDuration="600"
+        app:sliderIndicatorGravity="center_horizontal|bottom"
+        app:sliderIndicatorMargin="15dp"
+        app:sliderIndicatorOrientation="horizontal"
+        app:sliderIndicatorPadding="3dp"
+        app:sliderIndicatorRadius="2dp"
+        app:sliderIndicatorSelectedColor="#5A5A5A"
+        app:sliderIndicatorUnselectedColor="#FFF"
+        app:sliderScrollTimeInSec="2"
+        app:sliderStartAutoCycle="true" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_margin="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sliderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        style="@style/myText1"
+        android:textAlignment="center"
+        android:text="this is product name"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        style="@style/myText4"
+        android:text="this is feature 1\nfeature second"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:id="@+id/features"
+        android:layout_margin="10dp"/>
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/features"
+        android:text="품절 (pumjeol) is another expression for sold out (매진 | maejin), coming from the hanja for product (품 | pum) and gone (절 | jeol). The words 품절남 (pumjeollam) and 품절녀 (pumjeollyeo) literally mean “sold-out man” and “sold-out woman,” they refer to somebody (a celebrity or popular friend) who has just got married and is therefore off the market for dating."/>
+    <LinearLayout
+        android:id="@+id/images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/about"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/myButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="10dp"
+        android:text="Add to cart"/>
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="10dp"
+        android:text="2000"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        style="@style/myText1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/textview4"/>
+    <TextView
+        android:id="@+id/textview4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="20sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="30dp"
+        android:text="₹"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

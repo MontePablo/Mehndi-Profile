@@ -149,7 +149,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
         }
     }
     fun func(){
-        adapter= ItemAdapter(this)
+        adapter= ItemAdapter(this,ItemAdapter.SURF)
 
         adapter.update(FakeData.dataset)
         binding.recylerView.adapter=adapter
@@ -157,8 +157,11 @@ class NewItem : AppCompatActivity(), itemFunctions {
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
     }
 
-    override fun itemClick(item: Item) {
+    override fun ItemClickFunc(item: Item) {
 
+    }
+
+    override fun openDiscountFunc(item: Item) {
     }
 
 }

@@ -25,15 +25,14 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
 
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= ItemAdapter(this,"discount")
-
+        adapter= ItemAdapter(this,ItemAdapter.DISCOUNT)
         adapter.update(FakeData.dataset)
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
     }
 
-    override fun itemClick(item: Item) {
+    override fun ItemClickFunc(item: Item) {
     }
 
     override fun openDiscountFunc(item: Item) {
@@ -42,6 +41,15 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
         dialogBuilder.setView(viewBinding.root)
         val dialog=dialogBuilder.create()
         dialog.show()
+        func(viewBinding)
+    }
 
+    private fun func(viewBinding: DiscountOptionsFragviewBinding) {
+        viewBinding.save.setOnClickListener(View.OnClickListener {
+
+        })
+        viewBinding.subItems.setOnClickListener(View.OnClickListener {
+            adapter.update(FakeData.dataset2)
+        })
     }
 }
