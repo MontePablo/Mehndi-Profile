@@ -1,16 +1,16 @@
 package com.adretsoftwere.mehndinterior.models
 
-class Item(name:String,imageurl:String,price:String="") {
+class Item(name:String="",imageurl:String="",price:String="") {
     var id=""
     var name=""
     var code=""
-    var imageurl=""
+    var image_url=""
     var parent=""
     var price=""
     var quantity=""
     init {
         this.name=name
-        this.imageurl=imageurl
+        this.image_url=imageurl
         this.price=price
     }
 

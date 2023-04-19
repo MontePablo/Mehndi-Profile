@@ -55,7 +55,7 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
                 listener.openDiscountFunc(items[position])
             }
         })
-        Glide.with(holder.itemView.context).load(items[position].imageurl).into(holder.image)
+        Glide.with(holder.itemView.context).load(items[position].image_url).into(holder.image)
     }
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {

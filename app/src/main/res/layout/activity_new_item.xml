@@ -111,6 +111,13 @@
                 android:textAllCaps="false"
                 android:text="add image"
                 android:id="@+id/addImage"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload"
+                android:id="@+id/uploadbtn"
+                android:layout_gravity="center"
+                style="@style/myButton"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

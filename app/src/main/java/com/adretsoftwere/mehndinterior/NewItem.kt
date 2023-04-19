@@ -13,24 +13,30 @@ import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
+import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
+import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 class NewItem : AppCompatActivity(), itemFunctions {
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
-
+    val item=Item()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityNewItemBinding.inflate(layoutInflater)
@@ -39,6 +45,14 @@ class NewItem : AppCompatActivity(), itemFunctions {
         binding.addImage.setOnClickListener(View.OnClickListener {
             addImage()
         })
+        binding.uploadbtn.setOnClickListener(View.OnClickListener {
+            item.name="demo name"
+            item.price="239"
+            item.image_url="https:ngn.jpg"
+            item.code="234FG"
+            item.parent="5"
+            item.quantity="4"
+            upload() })
         permission()
         func()
     }
@@ -158,10 +172,21 @@ class NewItem : AppCompatActivity(), itemFunctions {
     }
 
     override fun ItemClickFunc(item: Item) {
-
     }
 
     override fun openDiscountFunc(item: Item) {
+    }
+    fun upload(){
+        RetrofitClient.getApiHolder().sendItem(item).enqueue(object :
+            Callback<Item>{
+            override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                Log.d("TAG","upload success ${response.message()}")
+                Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
+            }
+            override fun onFailure(call: Call<Item>, t: Throwable) {
+                Log.d("TAG","upload failed ${t.localizedMessage}")
+            }
+        })
     }
 
 }
