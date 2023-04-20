@@ -2,6 +2,7 @@ package com.adretsoftwere.mehndinterior
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,6 +11,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.FileUtils
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -19,7 +21,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
+import com.adretsoftwere.mehndinterior.daos.ProgressRequestBody
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
+import com.adretsoftwere.mehndinterior.daos.UploadCallbacks
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
@@ -27,12 +31,14 @@ import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.util.*
 
-class NewItem : AppCompatActivity(), itemFunctions {
+class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
@@ -47,7 +53,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
         })
         binding.uploadbtn.setOnClickListener(View.OnClickListener {
             item.name="demo name"
-            item.price="239"
+            item.price="300"
             item.image_url="https:ngn.jpg"
             item.code="234FG"
             item.parent="5"
@@ -84,6 +90,23 @@ class NewItem : AppCompatActivity(), itemFunctions {
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
+
+            CoroutineScope(Dispatchers.IO).launch {
+                if(imageUri!=null){
+                    val dialog=ProgressDialog(this@NewItem)
+                    dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+                    dialog.setMessage("Uploading...")
+                    dialog.isIndeterminate=false
+                    dialog.max=100
+                    dialog.setCancelable(false)
+                    dialog.show()
+                    val file=File(imageUri.path)
+                    val requestFile=ProgressRequestBody(file,this@NewItem)
+                    val body=MultipartBody.Part.createFormData("uploaded_file",file.name,requestFile)
+
+                }
+            }
+
             imageBinding?.imageview?.setImageURI(imageUri)
             imageBinding?.storeUri?.text = imageUri.toString()
             imageBinding?.insert?.visibility=View.GONE
@@ -172,6 +195,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
     }
 
     override fun ItemClickFunc(item: Item) {
+
     }
 
     override fun openDiscountFunc(item: Item) {
@@ -187,6 +211,10 @@ class NewItem : AppCompatActivity(), itemFunctions {
                 Log.d("TAG","upload failed ${t.localizedMessage}")
             }
         })
+    }
+
+    override fun onProgressUpdate(percentage: Int) {
+
     }
 
 }
