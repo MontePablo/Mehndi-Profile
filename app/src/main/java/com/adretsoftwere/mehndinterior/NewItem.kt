@@ -42,6 +42,7 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
+//    lateinit var dialog:ProgressDialog
     val item=Item()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,35 +92,50 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
 
-            CoroutineScope(Dispatchers.IO).launch {
-                if(imageUri!=null){
-                    val dialog=ProgressDialog(this@NewItem)
-                    dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-                    dialog.setMessage("Uploading...")
-                    dialog.isIndeterminate=false
-                    dialog.max=100
-                    dialog.setCancelable(false)
-                    dialog.show()
-                    val file=File(imageUri.path)
-                    val requestFile=ProgressRequestBody(file,this@NewItem)
-                    val body=MultipartBody.Part.createFormData("uploaded_file",file.name,requestFile)
-
-                }
-            }
+           imageUpload(imageUri)
 
             imageBinding?.imageview?.setImageURI(imageUri)
             imageBinding?.storeUri?.text = imageUri.toString()
             imageBinding?.insert?.visibility=View.GONE
-//            CoroutineScope(Dispatchers.Default).launch {
-//                uploadImage(imageBinding!!,imageUri!!)
-//            }
+
         }
         return
 
     }
-    suspend fun uploadImage(viewBinding:CustomviewImageBinding,imageUri: Uri){
-            viewBinding.imageview.setImageURI(imageUri)
+
+    private fun imageUpload(imageUri: Uri?) {
+            if(imageUri!=null){
+                val file= File(RealPathUtil.getRealPath(this, imageUri))
+//                dialog=ProgressDialog(this@NewItem)
+//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+//                dialog.setMessage("Uploading...")
+//                dialog.isIndeterminate=false
+//                dialog.max=100
+//                dialog.setCancelable(false)
+//                dialog.show()
+                val requestFile=ProgressRequestBody(file,this)
+                Log.d("TAG","till here1")
+                val body=MultipartBody.Part.createFormData("uploaded_file",file.name,requestFile)
+                Log.d("TAG","till here11")
+
+                RetrofitClient.getApiHolder().photoUpload(body).enqueue(object: Callback<String>{
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        Log.d("TAG","till here2")
+//                        dialog.dismiss()
+                        Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
+                        Log.d("TAG","photoUpload finished : ${response.body()}")
+
+                    }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.d("TAG","photo upload failed: ${t.localizedMessage}")
+                    }
+                })
+                Log.d("TAG","donadone")
+            }
     }
+
+
     fun permission() {
         if (!checkPermission()){
             showPermissionDialog()
@@ -214,7 +230,7 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
     }
 
     override fun onProgressUpdate(percentage: Int) {
-
+//        dialog.progress=percentage
     }
 
 }

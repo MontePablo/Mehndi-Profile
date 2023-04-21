@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
@@ -18,6 +19,7 @@ interface RetrofitApiHolder {
     @POST("mehndi_profile/item.php")
     fun sendItem(@Body item: Item): Call<Item>
 
-    @POST("mehndi_profile/photo_upload.php")
-    fun photoUpload(@Part image:MultipartBody):Call<String>
+    @Multipart
+    @POST("mehndi_profile/upload.php")
+    fun photoUpload(@Part image:MultipartBody.Part):Call<String>
 }

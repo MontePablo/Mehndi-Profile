@@ -34,7 +34,7 @@ class ProgressRequestBody(file:File,listener:UploadCallbacks): RequestBody() {
                 sink.write(buffer,0,read)
             }
         }finally {
-
+            inputStream.close()
         }
     }
 
@@ -51,6 +51,6 @@ class ProgressRequestBody(file:File,listener:UploadCallbacks): RequestBody() {
         }
     }
 }
-interface UploadCallbacks{
+ interface UploadCallbacks{
     fun onProgressUpdate(percentage:Int)
 }
