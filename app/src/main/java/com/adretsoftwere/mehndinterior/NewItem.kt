@@ -28,21 +28,24 @@ import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
+import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.util.*
 
-class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
+class NewItem : AppCompatActivity(), itemFunctions {
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
-//    lateinit var dialog:ProgressDialog
+    lateinit var dialog:ProgressDialog
     val item=Item()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,12 +91,12 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
                 }
             }
         }else{
+            Log.d("TAG","onactivity else")
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
 
            imageUpload(imageUri)
-
             imageBinding?.imageview?.setImageURI(imageUri)
             imageBinding?.storeUri?.text = imageUri.toString()
             imageBinding?.insert?.visibility=View.GONE
@@ -104,30 +107,22 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
     }
 
     private fun imageUpload(imageUri: Uri?) {
+        Log.d("TAG","imageUpload strt")
             if(imageUri!=null){
                 val file= File(RealPathUtil.getRealPath(this, imageUri))
-//                dialog=ProgressDialog(this@NewItem)
-//                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-//                dialog.setMessage("Uploading...")
-//                dialog.isIndeterminate=false
-//                dialog.max=100
-//                dialog.setCancelable(false)
-//                dialog.show()
-                val requestFile=ProgressRequestBody(file,this)
-                Log.d("TAG","till here1")
+                val requestFile= RequestBody.create(MediaType.parse("image/*"), file);
+//                val requestFile= RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 val body=MultipartBody.Part.createFormData("uploaded_file",file.name,requestFile)
-                Log.d("TAG","till here11")
 
-                RetrofitClient.getApiHolder().photoUpload(body).enqueue(object: Callback<String>{
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
-                        Log.d("TAG","till here2")
-//                        dialog.dismiss()
+                RetrofitClient.getApiHolder().photoUpload(body).enqueue(object: Callback<RetrofitResponse>{
+                    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                        dialog.dismiss()
                         Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
-                        Log.d("TAG","photoUpload finished : ${response.body()}")
+                        Log.d("TAG","photoUpload finished : ${response.body()?.message} ${response.message()} ${response.code()}")
 
                     }
 
-                    override fun onFailure(call: Call<String>, t: Throwable) {
+                    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                         Log.d("TAG","photo upload failed: ${t.localizedMessage}")
                     }
                 })
@@ -218,19 +213,15 @@ class NewItem : AppCompatActivity(), itemFunctions ,UploadCallbacks{
     }
     fun upload(){
         RetrofitClient.getApiHolder().sendItem(item).enqueue(object :
-            Callback<Item>{
-            override fun onResponse(call: Call<Item>, response: Response<Item>) {
-                Log.d("TAG","upload success ${response.message()}")
+            Callback<RetrofitResponse>{
+            override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                Log.d("TAG","upload success ${response.code()}")
                 Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
             }
-            override fun onFailure(call: Call<Item>, t: Throwable) {
+            override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","upload failed ${t.localizedMessage}")
             }
         })
-    }
-
-    override fun onProgressUpdate(percentage: Int) {
-//        dialog.progress=percentage
     }
 
 }

@@ -11,9 +11,11 @@ object RetrofitClient {
 //        val gson = GsonBuilder()
 //            .setLenient()
 //            .create()
-
+//        val retrofit= Retrofit.Builder().baseUrl(ApiConstants.apiUrl)
+//            .addConverterFactory(GsonConverterFactory.create(gson)).build()
         val retrofit= Retrofit.Builder().baseUrl(ApiConstants.apiUrl)
             .addConverterFactory(GsonConverterFactory.create()).build()
+
         retrofitApiHolder=retrofit.create(RetrofitApiHolder::class.java)
     }
     fun getApiHolder(): RetrofitApiHolder {
