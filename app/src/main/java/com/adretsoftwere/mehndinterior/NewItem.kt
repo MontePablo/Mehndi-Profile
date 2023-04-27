@@ -21,17 +21,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
-import com.adretsoftwere.mehndinterior.daos.ProgressRequestBody
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
-import com.adretsoftwere.mehndinterior.daos.UploadCallbacks
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -45,7 +40,6 @@ class NewItem : AppCompatActivity(), itemFunctions {
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
-    lateinit var dialog:ProgressDialog
     val item=Item()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +101,6 @@ class NewItem : AppCompatActivity(), itemFunctions {
     }
 
     private fun imageUpload(imageUri: Uri?) {
-        Log.d("TAG","imageUpload strt")
             if(imageUri!=null){
                 val file= File(RealPathUtil.getRealPath(this, imageUri))
                 val requestFile= RequestBody.create(MediaType.parse("image/*"), file);
@@ -116,7 +109,6 @@ class NewItem : AppCompatActivity(), itemFunctions {
 
                 RetrofitClient.getApiHolder().photoUpload(body).enqueue(object: Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        dialog.dismiss()
                         Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
                         Log.d("TAG","photoUpload finished : ${response.body()?.message} ${response.message()} ${response.code()}")
 
@@ -126,7 +118,6 @@ class NewItem : AppCompatActivity(), itemFunctions {
                         Log.d("TAG","photo upload failed: ${t.localizedMessage}")
                     }
                 })
-                Log.d("TAG","donadone")
             }
     }
 

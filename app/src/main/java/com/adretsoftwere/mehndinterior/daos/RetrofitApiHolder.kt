@@ -15,7 +15,7 @@ import retrofit2.http.Part
 interface RetrofitApiHolder {
 
     @GET("mehndi_profile/item.php")
-    fun getItems(): Call<RetrofitResponse>
+    fun getItems(): Call<RetrofitItem>
 
     @POST("mehndi_profile/item.php")
     fun sendItem(@Body item: Item): Call<RetrofitResponse>
