@@ -1,17 +1,13 @@
 package com.adretsoftwere.mehndinterior
 
 import android.Manifest
-import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.FileUtils
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -25,7 +21,6 @@ import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
-import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -35,8 +30,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.util.*
+import kotlin.concurrent.timerTask
 
 class NewItem : AppCompatActivity(), itemFunctions {
+    val NOT_IMAGE="0"
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
@@ -62,12 +59,10 @@ class NewItem : AppCompatActivity(), itemFunctions {
     }
     fun addImage(){
         val imageBinding=CustomviewImageBinding.inflate(layoutInflater)
-
         imageBinding.insert.setOnClickListener(View.OnClickListener {
             photoPick(imageBinding.hashCode())
             imageViewTable.put(imageBinding.hashCode(),imageBinding)
         })
-
         binding.imageLayout.addView(imageBinding.root)
     }
     fun photoPick(requestCode: Int) {
@@ -85,12 +80,10 @@ class NewItem : AppCompatActivity(), itemFunctions {
                 }
             }
         }else{
-            Log.d("TAG","onactivity else")
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
-
-           imageUpload(imageUri)
+           imageUpload(imageUri,"54321",imageBinding)
             imageBinding?.imageview?.setImageURI(imageUri)
             imageBinding?.storeUri?.text = imageUri.toString()
             imageBinding?.insert?.visibility=View.GONE
@@ -100,25 +93,64 @@ class NewItem : AppCompatActivity(), itemFunctions {
 
     }
 
-    private fun imageUpload(imageUri: Uri?) {
+    private fun imageUpload(imageUri: Uri?, idd: String, imageBinding: CustomviewImageBinding?) {
             if(imageUri!=null){
+                progressBarFunc(imageBinding!!)
+                imageBinding.retry.visibility=View.GONE
+
                 val file= File(RealPathUtil.getRealPath(this, imageUri))
                 val requestFile= RequestBody.create(MediaType.parse("image/*"), file);
+                val id=RequestBody.create(MediaType.parse("text/plain"),idd)
 //                val requestFile= RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                val body=MultipartBody.Part.createFormData("uploaded_file",file.name,requestFile)
-
-                RetrofitClient.getApiHolder().photoUpload(body).enqueue(object: Callback<RetrofitResponse>{
+                val body=MultipartBody.Part.createFormData("uploaded_file",getNewFileName(file.name),requestFile)
+                RetrofitClient.getApiHolder().photoUpload(body,id).enqueue(object: Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                         Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
                         Log.d("TAG","photoUpload finished : ${response.body()?.message} ${response.message()} ${response.code()}")
-
+                        imageBinding!!.insert.visibility=View.GONE
                     }
 
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                        imageBinding!!.retry.visibility=View.VISIBLE
+                        imageBinding!!.retry.setOnClickListener(View.OnClickListener {
+                            imageUpload(imageUri,idd,imageBinding)
+                        })
+                        imageBinding.progressBar.visibility=View.GONE
+                        imageBinding.insert.visibility=View.GONE
+                        Toast.makeText(applicationContext,"upload failed! ${t.localizedMessage}",Toast.LENGTH_SHORT).show()
                         Log.d("TAG","photo upload failed: ${t.localizedMessage}")
                     }
                 })
             }
+    }
+    private fun progressBarFunc(viewBinding: CustomviewImageBinding){
+        viewBinding.progressBar.visibility=View.VISIBLE
+        var counter=0
+        var timer=Timer()
+        var timertask= timerTask {
+            run(){
+                super.runOnUiThread(Runnable {
+                    counter++;
+                    viewBinding.progressBar.setProgress(counter)
+                    if(counter==100){
+                        timer.cancel()
+                        viewBinding.progressBar.visibility=View.INVISIBLE
+                    }
+                })
+            }
+        }
+        timer.schedule(timertask,0,15)
+    }
+    private fun getNewFileName(n:String):String{
+        var name=System.currentTimeMillis().toString()
+        if(n.contains(".jpg") || n.contains("JPG")){
+           name+=".jpg"
+        }else if(n.contains(".png")){
+            name+=".png"
+        }else{
+            name=NOT_IMAGE
+        }
+        return name
     }
 
 

@@ -4,6 +4,7 @@ import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,5 +23,5 @@ interface RetrofitApiHolder {
 
     @Multipart
     @POST("mehndi_profile/upload.php")
-    fun photoUpload(@Part image:MultipartBody.Part):Call<RetrofitResponse>
+    fun photoUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
 }
