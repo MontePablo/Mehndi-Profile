@@ -24,4 +24,7 @@ interface RetrofitApiHolder {
     @Multipart
     @POST("mehndi_profile/upload.php")
     fun photoUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
+
+//    @GET("mehndi_profile/search_user.php")
+//    fun getItems(): Call<RetrofitItem>
 }

@@ -38,7 +38,6 @@ class Items : AppCompatActivity(),itemFunctions {
                 for(i in s!!){
                     Log.d("TAG",i.name+" "+i.price+"\n")
                     Log.d("TAG","onresponse: ${response.message()}")
-
                 }
             }
 
