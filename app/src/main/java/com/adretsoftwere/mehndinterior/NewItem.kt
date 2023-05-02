@@ -108,6 +108,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
                         Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
                         Log.d("TAG","photoUpload finished : ${response.body()?.message} ${response.message()} ${response.code()}")
                         imageBinding!!.insert.visibility=View.GONE
+
                     }
 
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
