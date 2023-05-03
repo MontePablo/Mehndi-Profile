@@ -2,7 +2,7 @@ package com.adretsoftwere.mehndinterior.daos
 
 object ApiConstants{
 
-    val apiUrl="https://d683-103-121-156-102.ngrok-free.app/"
+    val apiUrl="https://bd78-103-121-156-102.ngrok-free.app/"
     val imageUrl="assets/"
 
     val code_OK=200

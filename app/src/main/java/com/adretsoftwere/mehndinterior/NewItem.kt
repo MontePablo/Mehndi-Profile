@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
+import com.adretsoftwere.mehndinterior.daos.ApiConstants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
@@ -37,23 +38,38 @@ class NewItem : AppCompatActivity(), itemFunctions {
     var imageViewTable: Hashtable<Int, CustomviewImageBinding> = Hashtable<Int,CustomviewImageBinding>()
     lateinit var binding: ActivityNewItemBinding
     lateinit var adapter: ItemAdapter
+    var mainImage=""
+    var parent=""
+    val images= arrayListOf<String>()
     val item=Item()
+    val item_id=System.currentTimeMillis().toString()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityNewItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        if(item.item_id.isNullOrEmpty())
+//            item.item_id=System.currentTimeMillis().toString()
         window.statusBarColor=getColor(R.color.sixty1)
+        addImage()
         binding.addImage.setOnClickListener(View.OnClickListener {
             addImage()
         })
+        binding.mainImage.insert.setOnClickListener(View.OnClickListener {
+            photoPick(binding.mainImage.hashCode())
+            imageViewTable.put(binding.mainImage.hashCode(),binding.mainImage)
+        })
         binding.uploadbtn.setOnClickListener(View.OnClickListener {
-            item.name="demo name"
-            item.price="300"
-            item.image_url="https:ngn.jpg"
-            item.code="234FG"
-            item.parent="5"
-            item.quantity="4"
-            upload() })
+//            item.name="demo name"
+//            item.price="300"
+//            item.image_url="https:ngn.jpg"
+//            item.code="234FG"
+//            item.parent="5"
+//            item.quantity="4"
+            if(parent.isBlank() || binding.name.text.isBlank() || binding.price.text.isBlank() || binding.code.text.isBlank() || binding.quantity.text.isBlank() || imageViewTable.isEmpty)
+                Toast.makeText(applicationContext,"fill all the fields first!",Toast.LENGTH_LONG).show()
+            else
+                upload()
+            })
         permission()
         func()
     }
@@ -83,32 +99,35 @@ class NewItem : AppCompatActivity(), itemFunctions {
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
-           imageUpload(imageUri,"54321",imageBinding)
-            imageBinding?.imageview?.setImageURI(imageUri)
-            imageBinding?.storeUri?.text = imageUri.toString()
-            imageBinding?.insert?.visibility=View.GONE
-
+           imageUpload(imageUri,item_id,imageBinding)
         }
         return
-
     }
 
     private fun imageUpload(imageUri: Uri?, idd: String, imageBinding: CustomviewImageBinding?) {
             if(imageUri!=null){
+                imageBinding?.imageview?.setImageURI(imageUri)
+                imageBinding?.insert?.visibility=View.GONE
                 progressBarFunc(imageBinding!!)
                 imageBinding.retry.visibility=View.GONE
-
                 val file= File(RealPathUtil.getRealPath(this, imageUri))
+                val fileName=getNewFileName(file.name)
+                imageBinding.storeName.text=fileName
                 val requestFile= RequestBody.create(MediaType.parse("image/*"), file);
                 val id=RequestBody.create(MediaType.parse("text/plain"),idd)
 //                val requestFile= RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                val body=MultipartBody.Part.createFormData("uploaded_file",getNewFileName(file.name),requestFile)
-                RetrofitClient.getApiHolder().photoUpload(body,id).enqueue(object: Callback<RetrofitResponse>{
+                val body=MultipartBody.Part.createFormData("uploaded_file",fileName,requestFile)
+                RetrofitClient.getApiHolder().imageUpload(body,id).enqueue(object: Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
-                        Log.d("TAG","photoUpload finished : ${response.body()?.message} ${response.message()} ${response.code()}")
-                        imageBinding!!.insert.visibility=View.GONE
-
+                        if(response.code()==ApiConstants.code_CREATED) {
+                            Toast.makeText(applicationContext, "uploaded!", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.d("TAG ",response.code().toString())
+                            imageBinding!!.insert.visibility = View.GONE
+                        }else{
+                            Log.d("TAG ",response.code().toString())
+                            Toast.makeText(applicationContext,"Failed!",Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
@@ -236,6 +255,9 @@ class NewItem : AppCompatActivity(), itemFunctions {
     override fun openDiscountFunc(item: Item) {
     }
     fun upload(){
+
+        dataStore()
+
         RetrofitClient.getApiHolder().sendItem(item).enqueue(object :
             Callback<RetrofitResponse>{
             override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
@@ -248,4 +270,20 @@ class NewItem : AppCompatActivity(), itemFunctions {
         })
     }
 
+    fun dataStore(){
+        for(i in imageViewTable){
+            if(i.value==binding.mainImage){
+                mainImage=i.value.storeName.text.toString()
+            }else{
+                images.add(i.value.storeName.text.toString())
+            }
+        }
+        item.name=binding.name.text.toString()
+        item.code=binding.code.text.toString()
+        item.price=binding.price.text.toString()
+        item.quantity=binding.quantity.text.toString()
+        item.image_url=mainImage
+        item.parent=parent
+        item.item_id=item_id
+    }
 }

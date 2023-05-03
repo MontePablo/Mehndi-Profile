@@ -30,12 +30,12 @@ class Items : AppCompatActivity(),itemFunctions {
         adapter.update(FakeData.dataset)
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false)
-        Log.d("TAG","startingg")
 
         RetrofitClient.getApiHolder().getItems().enqueue(object:Callback<RetrofitItem>{
             override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
                 if(response.code()==ApiConstants.code_OK){
-                    Log.d("TAG",response.body()!!.data.get(0).name)
+                    Log.d("TAG",response.code().toString())
+                    adapter.update(response.body()!!.data)
                 }else {
                     Log.d("TAG 2",response.code().toString() + response.message().toString())
                 }

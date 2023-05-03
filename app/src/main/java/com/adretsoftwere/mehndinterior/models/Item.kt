@@ -1,7 +1,7 @@
 package com.adretsoftwere.mehndinterior.models
 
 class Item(name:String="",imageurl:String="",price:String="") {
-    var id=""
+    var item_id=""
     var name=""
     var code=""
     var image_url=""

@@ -1,6 +1,7 @@
 package com.adretsoftwere.mehndinterior.daos
 
 import com.adretsoftwere.mehndinterior.models.Item
+import com.adretsoftwere.mehndinterior.models.RetrofitImage
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import okhttp3.MultipartBody
@@ -22,9 +23,13 @@ interface RetrofitApiHolder {
     fun sendItem(@Body item: Item): Call<RetrofitResponse>
 
     @Multipart
-    @POST("mehndi_profile/upload.php")
-    fun photoUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
+    @POST("mehndi_profile/image_upload.php")
+    fun imageUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
 
 //    @GET("mehndi_profile/search_user.php")
 //    fun getItems(): Call<RetrofitItem>
+
+    @Multipart
+    @POST("mehndi_profile/image_download.php")
+    fun imageDownload(@Part("id") id:RequestBody):Call<RetrofitImage>
 }
