@@ -3,15 +3,12 @@ package com.adretsoftwere.mehndinterior
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
-import com.adretsoftwere.mehndinterior.adapters.userFunctions
 import com.adretsoftwere.mehndinterior.databinding.ActivityDiscountsManageBinding
 import com.adretsoftwere.mehndinterior.databinding.DiscountOptionsFragviewBinding
-import com.adretsoftwere.mehndinterior.databinding.SearchUserFragviewBinding
 import com.adretsoftwere.mehndinterior.models.Item
 
 class DiscountsManage : AppCompatActivity(), itemFunctions{
@@ -32,7 +29,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
     }
 
-    override fun ItemClickFunc(item: Item) {
+    override fun ItemClickFunc(item: Item, view: View) {
     }
 
     override fun openDiscountFunc(item: Item) {

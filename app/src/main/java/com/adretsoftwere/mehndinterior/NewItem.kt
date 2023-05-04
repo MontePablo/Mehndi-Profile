@@ -247,9 +247,14 @@ class NewItem : AppCompatActivity(), itemFunctions {
         binding.recylerView.layoutManager=
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
     }
-
-    override fun ItemClickFunc(item: Item) {
-
+    lateinit var mView:View
+    override fun ItemClickFunc(item: Item, view: View) {
+        view.isSelected=true
+        view.isPressed=true
+        if(mView!=null){
+            mView.isPressed=false
+            mView.isSelected=false
+        }
     }
 
     override fun openDiscountFunc(item: Item) {

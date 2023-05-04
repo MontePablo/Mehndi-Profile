@@ -3,6 +3,7 @@ package com.adretsoftwere.mehndinterior
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
@@ -11,6 +12,8 @@ import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityItemsBinding
 import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +30,7 @@ class Items : AppCompatActivity(),itemFunctions {
         adapter= ItemAdapter(this,ItemAdapter.SURF)
 
 
-        adapter.update(FakeData.dataset)
+//        adapter.update(FakeData.dataset)
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false)
 
@@ -51,8 +54,21 @@ class Items : AppCompatActivity(),itemFunctions {
 
     }
 
-    override fun ItemClickFunc(item: Item) {
-        adapter.update(FakeData.dataset2)
+    override fun ItemClickFunc(item: Item, view: View) {
+//        adapter.update(FakeData.dataset2)
+        val parent= RequestBody.create(MediaType.parse("text/plain"),item.item_id)
+        RetrofitClient.getApiHolder().getItemsByParent(parent).enqueue(object : Callback<RetrofitItem>{
+            override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
+                if(response.code()==ApiConstants.code_OK)
+                    adapter.update(response.body()!!.data)
+                else{
+                    Log.d("TAG",response.code().toString())
+                }
+            }
+            override fun onFailure(call: Call<RetrofitItem>, t: Throwable) {
+                Log.d("TAG",t.localizedMessage)
+            }
+        })
     }
 
     override fun openDiscountFunc(item: Item) {

@@ -10,6 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="20dp"
         android:id="@+id/recyclerView"
+        style="@style/myBackround"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

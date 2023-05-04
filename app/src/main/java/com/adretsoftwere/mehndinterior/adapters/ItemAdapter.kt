@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
@@ -18,7 +19,7 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
     }
 
     var listener:itemFunctions
-    lateinit var items:ArrayList<Item>
+    var items= arrayListOf<Item>()
     var z=""
     init {
         this.listener=listener
@@ -49,7 +50,7 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
         }
         holder.root.setOnClickListener(View.OnClickListener {
             if(z==SURF) {
-                listener.ItemClickFunc(items[position])
+                listener.ItemClickFunc(items[position],it)
             }else if(z== DISCOUNT){
                 //            holder.root.isPressed=true
                 listener.openDiscountFunc(items[position])
@@ -63,11 +64,11 @@ class ItemAdapter(listener:itemFunctions,z:String): RecyclerView.Adapter<ItemAda
         var price=view.findViewById<TextView>(R.id.item_price)
         var priceUnit=view.findViewById<TextView>(R.id.item_price_unit)
         var name=view.findViewById<TextView>(R.id.item_title)
-        var root=view.findViewById<ConstraintLayout>(R.id.item_root)
+        var root=view.findViewById<CardView>(R.id.item_root)
     }
 }
 interface itemFunctions{
-    fun ItemClickFunc(item:Item)
+    fun ItemClickFunc(item: Item, view: View)
     fun openDiscountFunc(item:Item)
 
 }
