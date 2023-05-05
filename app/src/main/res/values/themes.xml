@@ -57,7 +57,7 @@
     <style name="myDashboard">
         <item name="android:background">@color/white</item>
         <item name="android:backgroundTint">@color/white</item>
-        <item name="android:foreground">@drawable/foreground_click_effect_crner20dp</item>
+        <item name="android:foreground">@drawable/foreground_click_effect_crner</item>
     </style>
 <!--    <style name="myButton">-->
 

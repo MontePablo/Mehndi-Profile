@@ -22,7 +22,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
 
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= ItemAdapter(this,ItemAdapter.DISCOUNT)
+        adapter= ItemAdapter(this, ItemAdapter.DISCOUNT, layoutInflater, applicationContext)
         adapter.update(FakeData.dataset)
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=
@@ -30,6 +30,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
     }
 
     override fun ItemClickFunc(item: Item, view: View) {
+
     }
 
     override fun openDiscountFunc(item: Item) {
@@ -46,7 +47,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
 
         })
         viewBinding.subItems.setOnClickListener(View.OnClickListener {
-            adapter.update(FakeData.dataset2)
+//            adapter.update(FakeData.dataset2)
         })
     }
 }

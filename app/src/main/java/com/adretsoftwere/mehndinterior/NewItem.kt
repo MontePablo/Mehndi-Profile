@@ -3,6 +3,7 @@ package com.adretsoftwere.mehndinterior
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -240,24 +241,22 @@ class NewItem : AppCompatActivity(), itemFunctions {
         }
     }
     fun func(){
-        adapter= ItemAdapter(this,ItemAdapter.SURF)
+        adapter= ItemAdapter(this, ItemAdapter.SURF, layoutInflater, applicationContext)
 
         adapter.update(FakeData.dataset)
         binding.recylerView.adapter=adapter
         binding.recylerView.layoutManager=
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
     }
-    lateinit var mView:View
+
+    var mView: View? =null
     override fun ItemClickFunc(item: Item, view: View) {
-        view.isSelected=true
-        view.isPressed=true
-        if(mView!=null){
-            mView.isPressed=false
-            mView.isSelected=false
-        }
+       view.background=resources.getDrawable(R.drawable.selected_bg)
+       this.parent=item.item_id
     }
 
     override fun openDiscountFunc(item: Item) {
+
     }
     fun upload(){
 

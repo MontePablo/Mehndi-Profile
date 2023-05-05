@@ -16,20 +16,24 @@ import retrofit2.http.Part
 
 interface RetrofitApiHolder {
 
-    @GET("mehndi_profile/item.php")
+    @GET("item.php")
     fun getItems(): Call<RetrofitItem>
 
-    @POST("mehndi_profile/item.php")
+    @POST("item.php")
     fun sendItem(@Body item: Item): Call<RetrofitResponse>
 
     @Multipart
-    @POST("mehndi_profile/image_upload.php")
+    @POST("image_upload.php")
     fun imageUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
 
 //    @GET("mehndi_profile/search_user.php")
 //    fun getItems(): Call<RetrofitItem>
 
     @Multipart
-    @POST("mehndi_profile/image_download.php")
+    @POST("image_download.php")
     fun imageDownload(@Part("id") id:RequestBody):Call<RetrofitImage>
+
+    @Multipart
+    @POST("item_by_parent.php")
+    fun getItemsByParent(@Part("parent") parent:RequestBody): Call<RetrofitItem>
 }

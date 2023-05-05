@@ -27,7 +27,7 @@ class Items : AppCompatActivity(),itemFunctions {
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= ItemAdapter(this,ItemAdapter.SURF)
+        adapter= ItemAdapter(this,ItemAdapter.SURF,layoutInflater,applicationContext)
 
 
 //        adapter.update(FakeData.dataset)
@@ -57,6 +57,7 @@ class Items : AppCompatActivity(),itemFunctions {
     override fun ItemClickFunc(item: Item, view: View) {
 //        adapter.update(FakeData.dataset2)
         val parent= RequestBody.create(MediaType.parse("text/plain"),item.item_id)
+        Log.d("TAG",item.item_id + item.name)
         RetrofitClient.getApiHolder().getItemsByParent(parent).enqueue(object : Callback<RetrofitItem>{
             override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
                 if(response.code()==ApiConstants.code_OK)
@@ -72,5 +73,6 @@ class Items : AppCompatActivity(),itemFunctions {
     }
 
     override fun openDiscountFunc(item: Item) {
+
     }
 }
