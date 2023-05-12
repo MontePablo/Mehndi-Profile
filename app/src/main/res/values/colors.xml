@@ -9,11 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="sixty1">#B4E1FE</color>
-    <color name="thirty1">#1536C3</color>
-    <color name="thirty11">#D9EEFF</color>
-    <color name="ten1">#5CB0DF</color>
-    <color name="ten11">#9900FFC6</color>
+    <color name="sixty1">#EDEDED</color>
+    <color name="thirty1">#FFFFFF</color>
+    <color name="thirty11">#EF3F24</color>
+    <color name="ten1">#9CF4FF</color>
+    <color name="ten11">#9900FFC5</color>
 
 <!--    <color name="sixty1">#EC9ED2</color>-->
 <!--    <color name="thirty1">#EF4024</color>-->

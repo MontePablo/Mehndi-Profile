@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,14 +50,15 @@
                     android:layout_height="wrap_content"
                     android:text="Linked parent"/>
                 <TextView
+                    style="@style/myText4"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="30dp"
                     android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    style="@style/myText1"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,6 +71,7 @@
                 android:layout_height="wrap_content"/>
 <!--            image-->
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +103,7 @@
             <include android:id="@+id/mainImage"
                 layout="@layout/customview_image"/>
             <TextView
+                style="@style/myText4"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

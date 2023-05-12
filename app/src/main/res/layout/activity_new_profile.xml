@@ -60,6 +60,17 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="address"/>
+            <EditText
+                android:layout_margin="10dp"
+                style="@style/myEdittext"
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="account type"/>
             <Spinner
                 android:layout_width="match_parent"
@@ -81,6 +92,14 @@
                 android:gravity="center_vertical"
                 android:drawableEnd="@drawable/arrow_down_logo"
                 />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/myButton"
+                android:text="Create"
+                android:layout_marginTop="40dp"
+                android:layout_gravity="center"
+                android:id="@+id/create"/>
         </LinearLayout>
     </ScrollView>
 

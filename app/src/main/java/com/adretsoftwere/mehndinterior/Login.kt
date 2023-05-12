@@ -17,7 +17,6 @@ class Login : AppCompatActivity() {
         binding.signIn.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext, MainActivity::class.java))
         })
-        binding.signUp.setOnClickListener(View.OnClickListener {
-        })
+
     }
 }

@@ -61,10 +61,10 @@ object FakeData {
         dataset2.add(Item("white velvet", "https://i.ibb.co/2KG4M2c/c.png", "2000.00"))
         dataset2.add(Item("wooden velvet", "https://i.ibb.co/B6MqwP4/d.png", "2000.00"))
 
-        userSet.add(User("Maharaj Dey","7688009301","maharaj@gmail.com"))
-        userSet.add(User("vivek raj","1234567890","vivek@gmail.com"))
-        userSet.add(User("Arijit sanfui","8910533854","arijit@gmail.com"))
-        userSet.add(User("ankit tiwari","9903045419","ankit@gmail.com"))
+//        userSet.add(User("Maharaj Dey","7688009301","maharaj@gmail.com"))
+//        userSet.add(User("vivek raj","1234567890","vivek@gmail.com"))
+//        userSet.add(User("Arijit sanfui","8910533854","arijit@gmail.com"))
+//        userSet.add(User("ankit tiwari","9903045419","ankit@gmail.com"))
 
     }
 }

@@ -8,6 +8,8 @@ class Item(name:String="",imageurl:String="",price:String="") {
     var parent=""
     var price=""
     var quantity=""
+    var about=""
+    var features=""
     init {
         this.name=name
         this.image_url=imageurl

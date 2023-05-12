@@ -241,7 +241,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
         }
     }
     fun func(){
-        adapter= ItemAdapter(this, ItemAdapter.SURF, layoutInflater, applicationContext)
+        adapter= ItemAdapter(this, layoutInflater, applicationContext)
 
         adapter.update(FakeData.dataset)
         binding.recylerView.adapter=adapter
@@ -255,9 +255,6 @@ class NewItem : AppCompatActivity(), itemFunctions {
        this.parent=item.item_id
     }
 
-    override fun openDiscountFunc(item: Item) {
-
-    }
     fun upload(){
 
         dataStore()

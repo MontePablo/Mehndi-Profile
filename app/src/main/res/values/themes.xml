@@ -20,8 +20,8 @@
     <style name="myButton">
         <item name="android:textAllCaps">false</item>
         <item name="android:foreground">@drawable/foreground_click_effect_crner20dp</item>
-        <item name="android:backgroundTint">@color/thirty1</item>
-        <item name="android:textColor">@color/thirty11</item>
+        <item name="android:backgroundTint">@color/thirty11</item>
+        <item name="android:textColor">@color/thirty1</item>
         <item name="android:background">@drawable/shape_corner20dp</item>
         <item name="android:tint">@color/white</item>
     </style>
@@ -46,9 +46,9 @@
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="myEdittext">
-        <item name="android:textColorHint">@color/ten1</item>
-        <item name="android:textColor">@color/thirty1</item>
-        <item name="backgroundTint">@color/thirty11</item>
+        <item name="android:textColorHint">@color/thirty11</item>
+        <item name="android:textColor">@color/thirty11</item>
+        <item name="backgroundTint">@color/thirty1</item>
         <item name="android:background">@drawable/shape_corner20dp</item>
     </style>
     <style name="myDashboardImage">

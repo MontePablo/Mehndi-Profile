@@ -18,14 +18,9 @@ import com.bumptech.glide.Glide
 
 class ItemAdapter(
     listener: itemFunctions,
-    z: String,
     layoutInflater: LayoutInflater,
     applicationContext: Context
 ): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
-    companion object{
-        val SURF="1"
-        val DISCOUNT="2"
-    }
 
     var listener:itemFunctions
     var items= arrayListOf<Item>()
@@ -63,11 +58,7 @@ class ItemAdapter(
             holder.price.text = items[position].price
         }
         holder.root.setOnClickListener(View.OnClickListener {
-            if(z==SURF) {
-                listener.ItemClickFunc(items[position],it)
-            }else if(z== DISCOUNT){
-                listener.openDiscountFunc(items[position])
-            }
+            listener.ItemClickFunc(items[position],it)
         })
         val url=ApiConstants.apiUrl+ApiConstants.imageUrl+items[position].image_url
         Log.d("TAG",url)
@@ -84,6 +75,4 @@ class ItemAdapter(
 }
 interface itemFunctions{
     fun ItemClickFunc(item: Item, view: View)
-    fun openDiscountFunc(item:Item)
-
 }

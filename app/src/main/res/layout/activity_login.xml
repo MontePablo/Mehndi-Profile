@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/loginillust2"
     tools:context=".Login">
-        <ImageView
-            android:scaleType="centerCrop"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/loginillust"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signin_layout"
@@ -30,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            style="@style/myText2"
+            style="@style/myText1"
             android:text="Login"
             android:layout_marginBottom="20dp"
             android:textAlignment="center"
@@ -74,7 +73,8 @@
 
         <CheckBox
             android:textSize="13sp"
-            style="@style/myText2"
+            style="@style/myText4"
+            android:textStyle="bold"
             android:text="Remember Password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="40dp"/>
         <TextView
-            style="@style/myText2"
+            android:textStyle="bold"
+            style="@style/myText4"
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/forget_password"
             android:layout_width="wrap_content"
@@ -115,20 +116,6 @@
             app:layout_constraintWidth_percent="0.80" />
 
 
-        <Button
-            style="@style/myButton"
-            android:id="@+id/sign_up"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/shape_corner50dp"
-            android:text="Don't have a account?"
-            android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/sign_in"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_percent="0.09"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintWidth_percent="0.80" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
