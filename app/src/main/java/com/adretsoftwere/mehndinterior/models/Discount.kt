@@ -2,8 +2,8 @@ package com.adretsoftwere.mehndinterior.models
 
 class Discount {
     companion object {
-        val asPrice = "price"
-        val asPercentage = "percentage"
+        val PRICE = "price"
+        val PERCENTAGE = "percentage"
     }
     var user_id=""
     var item_id=""

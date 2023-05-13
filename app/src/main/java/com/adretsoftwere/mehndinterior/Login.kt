@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity() {
@@ -15,6 +16,9 @@ class Login : AppCompatActivity() {
         window.statusBarColor=getColor(R.color.sixty1)
 
         binding.signIn.setOnClickListener(View.OnClickListener {
+
+//            MySharedStorage.setUserId(id)
+
             startActivity(Intent(applicationContext, MainActivity::class.java))
         })
 

@@ -55,10 +55,13 @@ interface RetrofitApiHolder {
     fun getUser(): Call<RetrofitUser>
 
     @POST("cart.php")
-    fun setCart(@Body cart:Cart): Call<RetrofitResponse>
+    fun setCart(@Body cart:CartItem): Call<RetrofitResponse>
+
+    @POST("delete_cart.php")
+    fun deleteCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody): Call<RetrofitResponse>
 
     @GET("cart.php")
-    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCart>
+    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCartFull>
 
 
 }

@@ -11,6 +11,7 @@ import com.adretsoftwere.mehndinterior.adapters.AtStartup
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
 import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityDiscountsManageBinding
 import com.adretsoftwere.mehndinterior.databinding.DiscountOptionsFragviewBinding
@@ -61,19 +62,11 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
         dialogBuilder.setView(viewBinding.root)
         val dialog=dialogBuilder.create()
         dialog.show()
-        if(!AtStartup.getId(this).isBlank()){
-            getDiscount(AtStartup.user_id,item.item_id,viewBinding,dialog,item)
+        if(MySharedStorage.getUserId().isBlank()){
+            getDiscount(MySharedStorage.user_id,item.item_id,viewBinding,dialog,item)
         }
     }
 
-    private fun func(viewBinding: DiscountOptionsFragviewBinding) {
-        viewBinding.save.setOnClickListener(View.OnClickListener {
-
-        })
-        viewBinding.subItems.setOnClickListener(View.OnClickListener {
-//            adapter.update(FakeData.dataset2)
-        })
-    }
 
     fun getDiscount(
         userid: String,
@@ -88,7 +81,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
             override fun onResponse(call: Call<RetrofitDiscount>, response: Response<RetrofitDiscount>) {
                 if(response.code()== ApiConstants.code_OK){
                     viewBinding.amount.setText(response.body()!!.data[0].amount)
-                    if(response.body()!!.data[0].discount_type==Discount.asPercentage)
+                    if(response.body()!!.data[0].discount_type==Discount.PERCENTAGE)
                         viewBinding.radiopercent.isChecked=true
                     else
                         viewBinding.radioprice.isChecked=true
@@ -106,12 +99,10 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
         viewBinding.save.setOnClickListener(View.OnClickListener {
             var type=""
             if(viewBinding.radiogroup.checkedRadioButtonId==viewBinding.radiopercent.id)
-                type=Discount.asPercentage
+                type=Discount.PERCENTAGE
             else if(viewBinding.radiogroup.checkedRadioButtonId==viewBinding.radioprice.id)
-                type=Discount.asPrice
+                type=Discount.PRICE
             else{ Toast.makeText(applicationContext,"choose type first",Toast.LENGTH_SHORT).show()}
-
-            type=Discount.asPrice
 
             val price=viewBinding.amount.text.toString()
             if(price.isNullOrBlank())
