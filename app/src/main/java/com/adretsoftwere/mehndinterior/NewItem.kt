@@ -66,7 +66,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
 //            item.code="234FG"
 //            item.parent="5"
 //            item.quantity="4"
-            if(parent.isBlank() || binding.name.text.isBlank() || binding.price.text.isBlank() || binding.code.text.isBlank() || binding.quantity.text.isBlank() || imageViewTable.isEmpty)
+            if(binding.name.text.isBlank() || imageViewTable.isEmpty)
                 Toast.makeText(applicationContext,"fill all the fields first!",Toast.LENGTH_LONG).show()
             else
                 upload()

@@ -133,7 +133,7 @@
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     style="@style/myText3"
-                    android:text="My Orders"
+                    android:text="Manage Orders"
                     android:textAllCaps="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

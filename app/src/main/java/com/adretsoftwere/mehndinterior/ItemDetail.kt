@@ -48,10 +48,7 @@ class ItemDetail : AppCompatActivity() {
         val item_id= RequestBody.create(MediaType.parse("text/plain"),item.item_id)
         RetrofitClient.getApiHolder().itemImageDownload(item_id).enqueue(object :
             retrofit2.Callback<RetrofitImage> {
-            override fun onResponse(
-                call: Call<RetrofitImage>,
-                response: retrofit2.Response<RetrofitImage>
-            ) {
+            override fun onResponse(call: Call<RetrofitImage>, response: retrofit2.Response<RetrofitImage>) {
                 if (response.code() == ApiConstants.code_OK) {
 
                     var slideAdapter = SliderAdapter()
@@ -65,7 +62,7 @@ class ItemDetail : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RetrofitImage>, t: Throwable) {
-                Log.d("TAG", t.localizedMessage)
+                Log.d("TAG","itemImageDownload:"+ t.localizedMessage)
             }
         })
     }
@@ -89,14 +86,14 @@ class ItemDetail : AppCompatActivity() {
             retrofit2.Callback<RetrofitResponse> {
             override fun onResponse(call: Call<RetrofitResponse>, response: retrofit2.Response<RetrofitResponse>) {
                 if (response.code() == ApiConstants.code_OK) {
-                    Log.d("TAG","cart added")
+                    Log.d("TAG","setCart:"+"cart added")
                     binding.addtocart.text="Added to cart"
                     binding.addtocart.isClickable=false
                     Toast.makeText(applicationContext,"added to cart!",Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-                Log.d("TAG", t.localizedMessage)
+                Log.d("TAG","setCart:"+ t.localizedMessage)
             }
         })
     }
@@ -112,11 +109,11 @@ class ItemDetail : AppCompatActivity() {
                 }else if(response.code()==ApiConstants.code_NO_CONTENT){
 
                 }else{
-                    Log.d("TAG",response.code().toString())
+                    Log.d("TAG","getDiscountByUser:"+response.code().toString())
                 }
             }
             override fun onFailure(call: Call<RetrofitDiscount>, t: Throwable) {
-                Log.d("TAG", t.localizedMessage)
+                Log.d("TAG","getDiscountByUser"+ t.localizedMessage)
             }
         })
 

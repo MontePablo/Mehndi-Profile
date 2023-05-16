@@ -1,7 +1,7 @@
 package com.adretsoftwere.mehndinterior.models
 
 class User() {
-    var user_id=""
+    var id=""
     var password=""
     var name=""
     var mobile=""

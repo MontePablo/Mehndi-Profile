@@ -3,6 +3,7 @@ package com.adretsoftwere.mehndinterior
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.adretsoftwere.mehndinterior.daos.ApiConstants
@@ -44,14 +45,19 @@ class Login : AppCompatActivity() {
                             if(fetchedUser.password==password){
                                 Toast.makeText(applicationContext,"welcome!",Toast.LENGTH_SHORT).show()
                                 MySharedStorage.setUserId(fetchedUser.id)
-                                startActivity(Intent(applicationContext, MainActivity::class.java))
+                                val intent = Intent(applicationContext, MainActivity::class.java)
+                                intent.putExtra("user_type", fetchedUser.user_type)
+                                startActivity(intent)
                                 finish()
                             }else{
                                 Toast.makeText(applicationContext,"wrong password!",Toast.LENGTH_SHORT).show()
                             }
+                        }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                            Toast.makeText(applicationContext,"no user found!",Toast.LENGTH_SHORT).show()
                         }
                     }
                     override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
+                        Log.d("TAG","searchUser:"+t.localizedMessage)
                     }
                 })
             }
