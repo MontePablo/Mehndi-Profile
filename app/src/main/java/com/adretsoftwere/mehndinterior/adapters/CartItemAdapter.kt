@@ -11,16 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
 import com.adretsoftwere.mehndinterior.daos.ApiConstants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
-import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.models.CartItem
-import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import com.bumptech.glide.Glide
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
 
 
 class CartItemAdapter(
@@ -60,23 +52,18 @@ class CartItemAdapter(
         holder.price.text=items[position].price
         holder.increase.setOnClickListener(View.OnClickListener {
             holder.quantity.text=(holder.quantity.text.toString().toInt()+1).toString()
-            listener.increaseQuantity(items[position].user_id,items[position].item_id)
+            listener.increaseQuantity(items[position].user_id,items[position].item_id,position,holder.quantity.text.toString())
         })
         holder.decrease.setOnClickListener(View.OnClickListener {
-            if(holder.quantity.text.toString().toInt()>1) {
+            if(items[position].quantity.toInt()>1) {
                 holder.quantity.text = (holder.quantity.text.toString().toInt() - 1).toString()
-                listener.decreaseQuantity(MySharedStorage.getUserId(), items[position].item_id)
+                listener.decreaseQuantity(MySharedStorage.getUserId(), items[position].item_id,position,holder.quantity.text.toString())
             }else{
-                items.removeAt(position)
-
-                notifyDataSetChanged()
-                listener.deleteItem(items[position].user_id,items[position].item_id)
+                listener.deleteItem(items[position].user_id,items[position].item_id,position)
             }
         })
         holder.delete.setOnClickListener(View.OnClickListener {
-            items.removeAt(position)
-            notifyDataSetChanged()
-            listener.deleteItem(MySharedStorage.getUserId(),items[position].item_id)
+            listener.deleteItem(MySharedStorage.getUserId(),items[position].item_id, position)
         })
         val url=ApiConstants.apiUrl+ApiConstants.imageUrl+items[position].image_url
         Log.d("TAG",url)
@@ -97,23 +84,7 @@ class CartItemAdapter(
     }
 }
 interface cartItemFunctions{
-    fun deleteItem(userId: String, itemId: String)
-    fun increaseQuantity(userId: String, itemId: String)
-    fun decreaseQuantity(userId: String, itemId: String)
+    fun deleteItem(userId: String, itemId: String,position: Int)
+    fun increaseQuantity(userId: String, itemId: String, position: Int,quantity: String)
+    fun decreaseQuantity(userId: String, itemId: String, position: Int, quantity: String)
 }
-
-
-//val item_id= RequestBody.create(MediaType.parse("text/plain"),items[position].item_id)
-//val user_id= RequestBody.create(MediaType.parse("text/plain"),items[position].user_id)
-//RetrofitClient.getApiHolder().deleteCart(item_id,user_id).enqueue(object : Callback<RetrofitResponse>{
-//    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-//        if(response.code()==ApiConstants.code_OK){
-//            Toast.makeText(context,"failed!",Toast.LENGTH_SHORT).show()
-//        }else{
-//            Log.d("TAG",response.code().toString())
-//        }
-//    }
-//    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-//        Log.d("TAG",t.localizedMessage)
-//    }
-//})

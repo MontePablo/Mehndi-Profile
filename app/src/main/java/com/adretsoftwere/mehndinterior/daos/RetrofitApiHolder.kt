@@ -57,11 +57,29 @@ interface RetrofitApiHolder {
     @POST("cart.php")
     fun setCart(@Body cart:CartItem): Call<RetrofitResponse>
 
-    @POST("delete_cart.php")
+    @POST("cart.php")
+    fun increaseCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody,@Part("quantity") quantity:RequestBody,@Part("type") type:RequestBody): Call<RetrofitResponse>
+    @POST("cart.php")
+    fun decreaseCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody,@Part("quantity") quantity:RequestBody,@Part("type") type:RequestBody): Call<RetrofitResponse>
+    @POST("delete_cart_item.php")
     fun deleteCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody): Call<RetrofitResponse>
 
-    @GET("cart.php")
-    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCartFull>
+    @POST("delete_cart.php")
+    fun deleteWholeCart(@Part("user_id") user_id: RequestBody): Call<RetrofitResponse>
 
+    @GET("cart.php")
+    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCart>
+
+    @POST("order.php")
+    fun setOrder(@Body order:Order):Call<RetrofitResponse>
+
+    @POST("order.php")
+    fun getOrder(@Part("user_id") user_id: RequestBody):Call<RetrofitOrder>
+
+    @POST("set_item_to_order.php")
+    fun setItemToOrder(@Part("order_id") order_id:RequestBody,@Part("item_id") item_id:RequestBody):Call<RetrofitResponse>
+
+    @POST("search_user.php")
+    fun searchUser(@Body user: User): Call<RetrofitUser>
 
 }

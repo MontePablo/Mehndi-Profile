@@ -88,11 +88,11 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
                 }else if(response.code()==ApiConstants.code_NO_CONTENT){
                 }
                 else{
-                    Log.d("TAG",response.code().toString())
+                    Log.d("TAG","getdiscountByUser:"+response.code().toString())
                 }
             }
             override fun onFailure(call: Call<RetrofitDiscount>, t: Throwable) {
-                Log.d("TAG",t.localizedMessage)
+                Log.d("TAG","getDiscountbyUser:"+t.localizedMessage)
             }
         })
 
@@ -120,11 +120,11 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
                             dialog.dismiss()
                         }
                         else{
-                            Log.d("TAG",response.code().toString())
+                            Log.d("TAG","setDiscount:"+response.code().toString())
                         }
                     }
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-                        Log.d("TAG",t.localizedMessage)
+                        Log.d("TAG","setDiscount:"+t.localizedMessage)
                     }
                 })
 
@@ -138,11 +138,11 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
                     if(response.code()==ApiConstants.code_OK)
                         adapter.update(response.body()!!.data)
                     else{
-                        Log.d("TAG",response.code().toString())
+                        Log.d("TAG","getItembyParent:"+response.code().toString())
                     }
                 }
                 override fun onFailure(call: Call<RetrofitItem>, t: Throwable) {
-                    Log.d("TAG",t.localizedMessage)
+                    Log.d("TAG","getItembyParent:"+t.localizedMessage)
                 }
             })
         })

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import com.adretsoftwere.mehndinterior.adapters.SliderAdapter
 import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMainBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitImage
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         binding.manageUsers.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext,Users::class.java))
         })
+        binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
+        binding.orders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
+
+        binding.logout.setOnClickListener { MySharedStorage.setUserId("") }
 
         var slideAdapter= SliderAdapter()
         binding.sliderView.setSliderAdapter(slideAdapter)

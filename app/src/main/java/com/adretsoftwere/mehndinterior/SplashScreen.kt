@@ -16,9 +16,14 @@ class SplashScreen : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         MySharedStorage.init(applicationContext)
+
+        if(MySharedStorage.getUserId().isBlank())
 //        actionBar?.hide()
         Handler().postDelayed({
-            startActivity(Intent(applicationContext, Login::class.java))
+            if(MySharedStorage.getUserId().isBlank())
+                startActivity(Intent(applicationContext, Login::class.java))
+            else
+                startActivity(Intent(applicationContext, MainActivity::class.java))
             finish()
         }, 2800)
     }

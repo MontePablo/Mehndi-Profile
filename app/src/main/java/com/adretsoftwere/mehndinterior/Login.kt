@@ -4,8 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import com.adretsoftwere.mehndinterior.daos.ApiConstants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
+import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityLoginBinding
+import com.adretsoftwere.mehndinterior.models.RetrofitUser
+import com.adretsoftwere.mehndinterior.models.User
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Login : AppCompatActivity() {
     lateinit var binding:ActivityLoginBinding
@@ -17,9 +25,37 @@ class Login : AppCompatActivity() {
 
         binding.signIn.setOnClickListener(View.OnClickListener {
 
-//            MySharedStorage.setUserId(id)
+            val user=User()
+            if(binding.id.text.isBlank() || binding.password.text.isBlank()){
+                Toast.makeText(applicationContext,"fill all fields first",Toast.LENGTH_SHORT).show()
+            }else{
+                val id=binding.id.text.toString()
+                val password=binding.password.text.toString()
 
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+                if(id.contains("@")){
+                    user.email=id
+                }else{
+                    user.mobile=id
+                }
+                RetrofitClient.getApiHolder().searchUser(user).enqueue(object: Callback<RetrofitUser>{
+                    override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
+                        if(response.code()==ApiConstants.code_OK){
+                            val fetchedUser=response.body()!!.data[0]
+                            if(fetchedUser.password==password){
+                                Toast.makeText(applicationContext,"welcome!",Toast.LENGTH_SHORT).show()
+                                MySharedStorage.setUserId(fetchedUser.id)
+                                startActivity(Intent(applicationContext, MainActivity::class.java))
+                                finish()
+                            }else{
+                                Toast.makeText(applicationContext,"wrong password!",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
+                    }
+                })
+            }
+
         })
 
     }
