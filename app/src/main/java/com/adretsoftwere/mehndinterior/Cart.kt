@@ -35,6 +35,7 @@ class Cart : AppCompatActivity(), cartItemFunctions {
         binding= ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
         adapter= CartItemAdapter(this,layoutInflater,this)
+        loadData()
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
         binding.continueBtn.setOnClickListener { placeOrder() }
