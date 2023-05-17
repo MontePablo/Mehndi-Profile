@@ -1,6 +1,6 @@
 package com.adretsoftwere.mehndinterior.models
 
-class CartItem {
+open class CartItem {
     var price=""
     var user_id=""
     var item_id=""

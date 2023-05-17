@@ -13,15 +13,13 @@ import com.adretsoftwere.mehndinterior.daos.ApiConstants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityCartBinding
-import com.adretsoftwere.mehndinterior.models.CartItem
-import com.adretsoftwere.mehndinterior.models.Order
-import com.adretsoftwere.mehndinterior.models.RetrofitCart
-import com.adretsoftwere.mehndinterior.models.RetrofitResponse
+import com.adretsoftwere.mehndinterior.models.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,19 +61,20 @@ class Cart : AppCompatActivity(), cartItemFunctions {
         })
     }
 
-    override fun decreaseQuantity(userId: String, itemId: String,position: Int,quantity:String ) {
-        val quantity=RequestBody.create(MediaType.parse("text/plain"),quantity)
+    override fun decreaseQuantity(userId: String, itemId: String,position: Int,quant:String ) {
+        val quantity=RequestBody.create(MediaType.parse("text/plain"),quant)
         val type=RequestBody.create(MediaType.parse("text/plain"),ApiConstants.DECREASE)
         val user_id=RequestBody.create(MediaType.parse("text/plain"),userId)
         val item_id=RequestBody.create(MediaType.parse("text/plain"),itemId)
         RetrofitClient.getApiHolder().increaseCart(item_id,user_id,quantity,type)
+        items[position].quantity=quant
     }
 
     fun loadData(){
         val user_id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
 
-        RetrofitClient.getApiHolder().getCart(user_id).enqueue(object: retrofit2.Callback<RetrofitCart>{
-            override fun onResponse(call: Call<RetrofitCart>, response: Response<RetrofitCart>) {
+        RetrofitClient.getApiHolder().getCart(user_id).enqueue(object: retrofit2.Callback<RetrofitCartItem>{
+            override fun onResponse(call: Call<RetrofitCartItem>, response: Response<RetrofitCartItem>) {
                 if(response.code()==ApiConstants.code_OK){
                     binding.empty.visibility= View.GONE
                     items=response.body()!!.data
@@ -88,7 +87,7 @@ class Cart : AppCompatActivity(), cartItemFunctions {
                 }
             }
 
-            override fun onFailure(call: Call<RetrofitCart>, t: Throwable) {
+            override fun onFailure(call: Call<RetrofitCartItem>, t: Throwable) {
                 Log.d("TAG","getCart:"+t.localizedMessage)
             }
 
@@ -142,7 +141,20 @@ class Cart : AppCompatActivity(), cartItemFunctions {
                                             Log.d("TAG","deleteWholeCart:"+t.localizedMessage)
                                         }
                                     })
-                                    finish()
+                                    for(cartItem in items){
+                                        val orderItem=OrderItem();orderItem.fromCartItem(cartItem);
+                                        orderItem.order_id=order.order_id
+                                        RetrofitClient.getApiHolder().setOrderItems(orderItem).enqueue(object:Callback<RetrofitResponse>{
+                                            override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                                                Log.d("TAG","setorderITems:"+response.code())
+                                                if(cartItem==items.last())
+                                                    finish()
+                                            }
+                                            override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                                                Log.d("TAG","setOrderItems:"+t.localizedMessage)
+                                            }
+                                        })
+                                    }
                                 }else{
                                     Log.d("TAG","setOrder:"+response.code().toString())
                                 }

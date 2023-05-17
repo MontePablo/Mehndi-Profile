@@ -45,6 +45,7 @@ class Login : AppCompatActivity() {
                             if(fetchedUser.password==password){
                                 Toast.makeText(applicationContext,"welcome!",Toast.LENGTH_SHORT).show()
                                 MySharedStorage.setUserId(fetchedUser.id)
+                                MySharedStorage.setUserType(fetchedUser.user_type)
                                 val intent = Intent(applicationContext, MainActivity::class.java)
                                 intent.putExtra("user_type", fetchedUser.user_type)
                                 startActivity(intent)

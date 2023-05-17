@@ -53,9 +53,15 @@ interface RetrofitApiHolder {
 
     @GET("user.php")
     fun getUser(): Call<RetrofitUser>
+    @POST("user.php")
+    fun getUserByParent(@Part("parent") parent:RequestBody): Call<RetrofitUser>
 
     @POST("cart.php")
     fun setCart(@Body cart:CartItem): Call<RetrofitResponse>
+
+    @GET("cart.php")
+    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCartItem>
+
 
     @POST("cart.php")
     fun increaseCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody,@Part("quantity") quantity:RequestBody,@Part("type") type:RequestBody): Call<RetrofitResponse>
@@ -66,9 +72,6 @@ interface RetrofitApiHolder {
 
     @POST("delete_cart.php")
     fun deleteWholeCart(@Part("user_id") user_id: RequestBody): Call<RetrofitResponse>
-
-    @GET("cart.php")
-    fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCart>
 
     @POST("order.php")
     fun setOrder(@Body order:Order):Call<RetrofitResponse>
@@ -81,5 +84,12 @@ interface RetrofitApiHolder {
 
     @POST("search_user.php")
     fun searchUser(@Body user: User): Call<RetrofitUser>
+
+    @POST("cart.php")
+    fun setOrderItems(@Body orderItem:OrderItem): Call<RetrofitResponse>
+
+    @GET("cart.php")
+    fun getOrderItems(@Part("order_id") order_id:RequestBody): Call<RetrofitOrderItem>
+
 
 }

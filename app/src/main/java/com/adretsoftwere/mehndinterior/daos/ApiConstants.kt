@@ -13,5 +13,10 @@ object ApiConstants{
 
     val INCREASE="increase"
     val DECREASE="decrease"
+    val MANUFACTURER="Manufacturer"
+    val DISTRIBUTER="Distributer"
+    val WHOLESALER="Wholesaler"
+    val RETAILER="Retailer"
+    val AGENT="Agent"
 
 }

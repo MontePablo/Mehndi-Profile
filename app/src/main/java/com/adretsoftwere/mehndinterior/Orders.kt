@@ -1,5 +1,6 @@
 package com.adretsoftwere.mehndinterior
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,9 @@ import com.adretsoftwere.mehndinterior.daos.ApiConstants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityOrdersBinding
+import com.adretsoftwere.mehndinterior.models.Order
 import com.adretsoftwere.mehndinterior.models.RetrofitOrder
+import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -47,7 +50,10 @@ class Orders : AppCompatActivity(),orderFunctions {
         })
     }
 
-    override fun itemClick(order_id: String) {
-
+    override fun itemClick(order: Order) {
+        val gson = Gson()
+        val intent = Intent(applicationContext, OrderDetail::class.java)
+        intent.putExtra("order", gson.toJson(order))
+        startActivity(intent)
     }
 }

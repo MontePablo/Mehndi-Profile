@@ -7,9 +7,8 @@ import android.preference.PreferenceManager
 object MySharedStorage {
     lateinit var context: Context
     lateinit var preference: SharedPreferences
-    var user_id =""
-    var loginId = ""
-    var password = ""
+    private var loginId = ""
+    private var password = ""
 
     lateinit var editor: SharedPreferences.Editor
 
@@ -23,12 +22,19 @@ object MySharedStorage {
     }
 
     fun getUserId(): String {
-        user_id = preference.getString("user_id", null)!!
-        return user_id
+        return  preference.getString("user_id", null)!!
     }
 
     fun setUserId(data: String) {
         editor.putString("user_id", data)
+        editor.apply()
+    }
+    fun getUserType(): String {
+        return  preference.getString("user_type", null)!!
+    }
+
+    fun setUserType(data: String) {
+        editor.putString("user_type", data)
         editor.apply()
     }
 //    fun getLoginId():String{

@@ -1,6 +1,6 @@
 package com.adretsoftwere.mehndinterior.models
 
-class RetrofitCart {
+class RetrofitCartItem {
       var status=""
       var message=""
       var data= arrayListOf<CartItem>()

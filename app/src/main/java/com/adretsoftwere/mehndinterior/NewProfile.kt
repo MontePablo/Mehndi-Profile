@@ -35,7 +35,7 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
         loadParents()
-        val list= listOf<String>("Manufacturer","Distributor","Wholesaler","Retailer","Agent")
+        val list= listOf<String>(ApiConstants.DISTRIBUTER,ApiConstants.AGENT,ApiConstants.MANUFACTURER,ApiConstants.RETAILER,ApiConstants.WHOLESALER)
         val shapeAdapter: ArrayAdapter<*>
         shapeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
         binding.spinnerAccountType.adapter=shapeAdapter
@@ -45,12 +45,14 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         binding.create.setOnClickListener(View.OnClickListener {
             val name=binding.name.text.toString();val email=binding.email.text.toString();val number=binding.mobile.text.toString()
             val address=binding.address.text.toString()
-            if(name.isBlank() || email.isBlank() || number.isBlank() || parentUser==null)
+            val password=binding.password.text.toString()
+            if(name.isBlank() || email.isBlank() || number.isBlank() || password.isBlank() )
                 Toast.makeText(applicationContext,"fill all fields first!",Toast.LENGTH_SHORT).show()
             else{
                 val user=User()
                 user.let {
                     it.name=name;it.email=email;it.mobile=number;it.address=address;it.parent=parentUser.id
+                    it.password=password
                 }
                 RetrofitClient.getApiHolder().setUser(user).enqueue(object:Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
@@ -88,9 +90,8 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         viewBinding.listView.adapter=adapter
         viewBinding.listView.onItemClickListener=object:AdapterView.OnItemClickListener{
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val user=FakeData.userSet[p2]
-                binding.searchUserText.text=user.name
-                parentUser=user
+                binding.searchUserText.text=users[p2].name
+                parentUser=users[p2]
                 dialog.dismiss()
             }
         }
