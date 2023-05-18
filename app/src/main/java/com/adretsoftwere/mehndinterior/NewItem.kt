@@ -3,7 +3,6 @@ package com.adretsoftwere.mehndinterior
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
@@ -120,7 +119,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
                 val body=MultipartBody.Part.createFormData("uploaded_file",fileName,requestFile)
                 RetrofitClient.getApiHolder().imageUpload(body,id).enqueue(object: Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        if(response.code()==ApiConstants.code_CREATED) {
+                        if(response.code()==Constants.code_CREATED) {
                             Toast.makeText(applicationContext, "uploaded!", Toast.LENGTH_SHORT)
                                 .show()
                             Log.d("TAG ",response.code().toString())

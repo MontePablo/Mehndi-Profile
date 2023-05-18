@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.adretsoftwere.mehndinterior.R
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.models.Image
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.SliderViewAdapter
@@ -28,7 +28,7 @@ class SliderAdapter(): SliderViewAdapter<SliderAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(viewHolder: ViewHolder?, position: Int) {
 
-        val url= ApiConstants.apiUrl+ ApiConstants.imageUrl+images[position].filename
+        val url= Constants.apiUrl+ Constants.imageUrl+images[position].filename
         Log.d("TAG",url)
         Glide.with(viewHolder?.imageView!!.context).load(url).into(viewHolder?.imageView!!)
     }

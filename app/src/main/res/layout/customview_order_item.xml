@@ -85,8 +85,9 @@
                              android:layout_height="wrap_content"
                              android:text="1000"/>
                          <LinearLayout
+                             android:visibility="gone"
                              android:layout_marginLeft="10dp"
-                             android:id="@+id/comission_portion"
+                             android:id="@+id/orderitem_comission_portion"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
                              android:orientation="horizontal">

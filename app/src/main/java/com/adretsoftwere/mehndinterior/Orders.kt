@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.OrderAdapter
 import com.adretsoftwere.mehndinterior.adapters.orderFunctions
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityOrdersBinding
@@ -35,10 +35,10 @@ class Orders : AppCompatActivity(),orderFunctions {
         val user_id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
         RetrofitClient.getApiHolder().getOrder(user_id).enqueue(object:Callback<RetrofitOrder>{
             override fun onResponse(call: Call<RetrofitOrder>, response: Response<RetrofitOrder>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     Log.d("TAG","getOrder:"+response.code().toString())
                     adapter.update(response.body()!!.data)
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
                     Log.d("TAG","getOrder:"+response.code().toString())
                     binding.empty.visibility= View.VISIBLE
                 }

@@ -6,17 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.UserAdapter
 import com.adretsoftwere.mehndinterior.adapters.userFunctions
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityUsersBinding
-import com.adretsoftwere.mehndinterior.databinding.DiscountOptionsFragviewBinding
 import com.adretsoftwere.mehndinterior.databinding.UserOptionsFragviewBinding
-import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.adretsoftwere.mehndinterior.models.User
 import retrofit2.Call
@@ -38,7 +34,7 @@ class Users : AppCompatActivity(),userFunctions {
 
         RetrofitClient.getApiHolder().getUser().enqueue(object: Callback<RetrofitUser> {
             override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
-                if(response.code()== ApiConstants.code_OK){
+                if(response.code()== Constants.code_OK){
                     adapter.update(response.body()!!.data)
                 }else {
                     Log.d("TAG 2",response.code().toString() + response.message().toString())

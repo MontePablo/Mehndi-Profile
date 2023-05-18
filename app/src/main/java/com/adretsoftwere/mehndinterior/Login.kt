@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityLoginBinding
@@ -40,7 +40,7 @@ class Login : AppCompatActivity() {
                 }
                 RetrofitClient.getApiHolder().searchUser(user).enqueue(object: Callback<RetrofitUser>{
                     override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
-                        if(response.code()==ApiConstants.code_OK){
+                        if(response.code()==Constants.code_OK){
                             val fetchedUser=response.body()!!.data[0]
                             if(fetchedUser.password==password){
                                 Toast.makeText(applicationContext,"welcome!",Toast.LENGTH_SHORT).show()
@@ -53,7 +53,7 @@ class Login : AppCompatActivity() {
                             }else{
                                 Toast.makeText(applicationContext,"wrong password!",Toast.LENGTH_SHORT).show()
                             }
-                        }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                        }else if(response.code()==Constants.code_NO_CONTENT){
                             Toast.makeText(applicationContext,"no user found!",Toast.LENGTH_SHORT).show()
                         }
                     }

@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.adretsoftwere.mehndinterior.adapters.SliderAdapter
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMainBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitImage
-import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import retrofit2.Call
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         RetrofitClient.getApiHolder().bannerImageDownload().enqueue(object :
             Callback<RetrofitImage> {
             override fun onResponse(call: Call<RetrofitImage>, response: Response<RetrofitImage>) {
-                if(response.code()== ApiConstants.code_OK)
+                if(response.code()== Constants.code_OK)
                     slideAdapter.updateData(response.body()!!.data)
                 else{
                     Log.d("TAG",response.code().toString())

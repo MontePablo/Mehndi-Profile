@@ -1,4 +1,4 @@
-package com.adretsoftwere.mehndinterior.models
+package com.adretsoftwere.mehndinterior
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,11 +6,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.*
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMyComissionsBinding
-import com.adretsoftwere.mehndinterior.databinding.ActivityOrderDetailBinding
+import com.adretsoftwere.mehndinterior.models.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -31,17 +31,17 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
         setContentView(binding.root)
         userAdapter=UserAdapter(this)
         orderAdapter= OrderAdapter(this,layoutInflater,this)
-        orderItemAdapter= OrderItemAdapter(this,layoutInflater,this)
+        orderItemAdapter= OrderItemAdapter(this)
         binding.recyclerView.adapter=userAdapter
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
 
         val parent= RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
         RetrofitClient.getApiHolder().getUserByParent(parent).enqueue(object:Callback<RetrofitUser>{
             override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     users=response.body()!!.data
                     userAdapter.update(users)
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
                     Toast.makeText(applicationContext,"no user present under you",Toast.LENGTH_SHORT).show()
                     Log.d("TAG","getUserbyParent:"+response.code())
                 }else{
@@ -60,11 +60,11 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
         val user_id=RequestBody.create(MediaType.parse("text/plain"),user.id)
         RetrofitClient.getApiHolder().getOrder(user_id).enqueue(object:Callback<RetrofitOrder>{
             override fun onResponse(call: Call<RetrofitOrder>, response: Response<RetrofitOrder>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     orders=response.body()!!.data
                     binding.recyclerView.adapter=orderAdapter
                     orderAdapter.update(orders)
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
                     Toast.makeText(applicationContext,"no orders found!",Toast.LENGTH_SHORT).show()
                 }else{
                     Log.d("TAG","getOrder:"+response.code())
@@ -81,11 +81,11 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
         val order_id=RequestBody.create(MediaType.parse("text/plain"),order.order_id)
         RetrofitClient.getApiHolder().getOrderItems(order_id).enqueue(object:Callback<RetrofitOrderItem>{
             override fun onResponse(call: Call<RetrofitOrderItem>, response: Response<RetrofitOrderItem>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     orderItems=response.body()!!.data
                     binding.recyclerView.adapter=orderItemAdapter
                     orderItemAdapter.update(orderItems)
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
                     Toast.makeText(applicationContext,"no items found!",Toast.LENGTH_SHORT).show()
                 }else{
                     Log.d("TAG","getOrderItems:"+response.code())

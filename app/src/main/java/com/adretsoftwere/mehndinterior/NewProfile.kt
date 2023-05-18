@@ -7,16 +7,14 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewProfileBinding
 import com.adretsoftwere.mehndinterior.databinding.SearchUserFragviewBinding
-import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.adretsoftwere.mehndinterior.models.User
@@ -35,7 +33,7 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
         loadParents()
-        val list= listOf<String>(ApiConstants.DISTRIBUTER,ApiConstants.AGENT,ApiConstants.MANUFACTURER,ApiConstants.RETAILER,ApiConstants.WHOLESALER)
+        val list= listOf<String>(Constants.DISTRIBUTER,Constants.AGENT,Constants.MANUFACTURER,Constants.RETAILER,Constants.WHOLESALER)
         val shapeAdapter: ArrayAdapter<*>
         shapeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
         binding.spinnerAccountType.adapter=shapeAdapter
@@ -56,7 +54,7 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 RetrofitClient.getApiHolder().setUser(user).enqueue(object:Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        if(response.code()==ApiConstants.code_OK){
+                        if(response.code()==Constants.code_OK){
                             Log.d("TAG",response.code().toString())
                             Toast.makeText(applicationContext,"created! succesfully!",Toast.LENGTH_SHORT).show()
                             startActivity(Intent(applicationContext,Users::class.java))
@@ -116,10 +114,10 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     fun loadParents(){
         RetrofitClient.getApiHolder().getUser().enqueue(object: Callback<RetrofitUser> {
             override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
-                if(response.code()== ApiConstants.code_OK){
+                if(response.code()== Constants.code_OK){
                     Log.d("TAG",response.code().toString())
                     users=response.body()!!.data
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
 
                 }
                 else {

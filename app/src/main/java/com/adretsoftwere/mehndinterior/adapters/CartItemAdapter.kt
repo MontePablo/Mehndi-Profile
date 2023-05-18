@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.models.CartItem
 import com.bumptech.glide.Glide
@@ -23,11 +23,7 @@ class CartItemAdapter(
 
     var listener:cartItemFunctions
     var items= arrayListOf<CartItem>()
-    lateinit var layoutInflater: LayoutInflater
-    lateinit var context: Context
     init {
-        this.layoutInflater=layoutInflater
-        this.context=applicationContext
         this.listener=listener
     }
 
@@ -65,7 +61,7 @@ class CartItemAdapter(
         holder.delete.setOnClickListener(View.OnClickListener {
             listener.deleteItem(MySharedStorage.getUserId(),items[position].item_id, position)
         })
-        val url=ApiConstants.apiUrl+ApiConstants.imageUrl+items[position].image_url
+        val url=Constants.apiUrl+Constants.imageUrl+items[position].image_url
         Log.d("TAG",url)
         Glide.with(holder.itemView.context).load(url).into(holder.image)
     }

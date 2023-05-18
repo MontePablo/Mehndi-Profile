@@ -6,8 +6,7 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.OrderItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.orderItemFunctions
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
-import com.adretsoftwere.mehndinterior.daos.MySharedStorage
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityOrderDetailBinding
 import com.adretsoftwere.mehndinterior.models.Order
@@ -47,7 +46,7 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
         val order_id=RequestBody.create(MediaType.parse("text/plain"), order.order_id)
         RetrofitClient.getApiHolder().getOrderItems(order_id).enqueue(object:Callback<RetrofitOrderItem>{
             override fun onResponse(call: Call<RetrofitOrderItem>, response: Response<RetrofitOrderItem>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     adapter.update(response.body()!!.data)
                 }else
                     Log.d("TAG","getOrderITem:"+response.code())

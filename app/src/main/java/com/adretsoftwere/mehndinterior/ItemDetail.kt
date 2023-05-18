@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.adretsoftwere.mehndinterior.adapters.SliderAdapter
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityItemDetailBinding
@@ -49,7 +49,7 @@ class ItemDetail : AppCompatActivity() {
         RetrofitClient.getApiHolder().itemImageDownload(item_id).enqueue(object :
             retrofit2.Callback<RetrofitImage> {
             override fun onResponse(call: Call<RetrofitImage>, response: retrofit2.Response<RetrofitImage>) {
-                if (response.code() == ApiConstants.code_OK) {
+                if (response.code() == Constants.code_OK) {
 
                     var slideAdapter = SliderAdapter()
                     binding.sliderView.setSliderAdapter(slideAdapter)
@@ -69,13 +69,14 @@ class ItemDetail : AppCompatActivity() {
     fun imageLoad(data: ArrayList<Image>) {
         for(i in data) {
             val viewBinding = ItemSliderBinding.inflate(layoutInflater)
-            val url=ApiConstants.apiUrl+ApiConstants.imageUrl+i
+            val url=Constants.apiUrl+Constants.imageUrl+i
             Glide.with(applicationContext).load(url).into(viewBinding.slideImage)
             binding.images.addView(viewBinding.root)
         }
     }
     fun addtoCart(){
         val cart=CartItem()
+        cart.fromItem(item)
         cart.item_id=item.item_id
         cart.user_id=MySharedStorage.getUserId()
         if(price!=0F){
@@ -85,7 +86,7 @@ class ItemDetail : AppCompatActivity() {
         RetrofitClient.getApiHolder().setCart(cart).enqueue(object :
             retrofit2.Callback<RetrofitResponse> {
             override fun onResponse(call: Call<RetrofitResponse>, response: retrofit2.Response<RetrofitResponse>) {
-                if (response.code() == ApiConstants.code_OK) {
+                if (response.code() == Constants.code_OK) {
                     Log.d("TAG","setCart:"+"cart added")
                     binding.addtocart.text="Added to cart"
                     binding.addtocart.isClickable=false
@@ -101,13 +102,26 @@ class ItemDetail : AppCompatActivity() {
         val user_id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
         val item_id= RequestBody.create(MediaType.parse("text/plain"),item.item_id)
 
-        RetrofitClient.getApiHolder().getDiscountByUser(user_id,item_id).enqueue(object :
-            retrofit2.Callback<RetrofitDiscount> {
+        RetrofitClient.getApiHolder().getDiscountByUser(user_id,item_id).enqueue(object : retrofit2.Callback<RetrofitDiscount> {
             override fun onResponse(call: Call<RetrofitDiscount>, response: retrofit2.Response<RetrofitDiscount>) {
-                if (response.code() == ApiConstants.code_OK) {
+                if (response.code() == Constants.code_OK) {
                     loadDiscountToView(response.body()!!.data)
-                }else if(response.code()==ApiConstants.code_NO_CONTENT){
+                }else if(response.code()==Constants.code_NO_CONTENT){
+                    val item_id= RequestBody.create(MediaType.parse("text/plain"),item.parent)
 
+                    RetrofitClient.getApiHolder().getDiscountByUser(user_id,item_id).enqueue(object : retrofit2.Callback<RetrofitDiscount> {
+                        override fun onResponse(call: Call<RetrofitDiscount>, response: retrofit2.Response<RetrofitDiscount>) {
+                            if (response.code() == Constants.code_OK) {
+                                loadDiscountToView(response.body()!!.data)
+                            }else if(response.code()==Constants.code_NO_CONTENT){
+
+                            }
+                            Log.d("TAG","getDiscountByUser:"+response.code().toString())
+                        }
+                        override fun onFailure(call: Call<RetrofitDiscount>, t: Throwable) {
+                            Log.d("TAG","getDiscountByUser"+ t.localizedMessage)
+                        }
+                    })
                 }else{
                     Log.d("TAG","getDiscountByUser:"+response.code().toString())
                 }
@@ -121,7 +135,7 @@ class ItemDetail : AppCompatActivity() {
 
     private fun loadDiscountToView(data: ArrayList<Discount>) {
         val disc=data[0]
-        if(disc.discount_type==Discount.PRICE){
+        if(disc.discount_type==Constants.PRICE){
            price=item.price.toFloat() - disc.amount.toFloat()
         }else{
             price="0.${disc.amount}".toFloat() * item.price.toFloat()

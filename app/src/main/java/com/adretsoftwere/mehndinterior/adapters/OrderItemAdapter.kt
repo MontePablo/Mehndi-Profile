@@ -1,6 +1,5 @@
 package com.adretsoftwere.mehndinterior.adapters
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,26 +8,30 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
-import com.adretsoftwere.mehndinterior.models.CartItem
+import com.adretsoftwere.mehndinterior.daos.Constants
+import com.adretsoftwere.mehndinterior.daos.MySharedStorage
+import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.models.OrderItem
+import com.adretsoftwere.mehndinterior.models.RetrofitDiscount
 import com.bumptech.glide.Glide
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class OrderItemAdapter(
     listener: orderItemFunctions,
-    layoutInflater: LayoutInflater,
-    applicationContext: Context
+    command:String="order"
 ): RecyclerView.Adapter<OrderItemAdapter.ViewHolder>() {
 
     var listener:orderItemFunctions
     var items= arrayListOf<OrderItem>()
-    lateinit var layoutInflater: LayoutInflater
-    lateinit var context: Context
+    lateinit var command: String
     init {
-        this.layoutInflater=layoutInflater
-        this.context=applicationContext
         this.listener=listener
+        this.command=command
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,9 +55,13 @@ class OrderItemAdapter(
         holder.price.text=items[position].price
         holder.quantity.text=items[position].quantity
         holder.root.setOnClickListener { listener.itemClick(items[position].item_id) }
-        val url=ApiConstants.apiUrl+ApiConstants.imageUrl+items[position].image_url
+        val url=Constants.apiUrl+Constants.imageUrl+items[position].image_url
         Log.d("TAG",url)
         Glide.with(holder.itemView.context).load(url).into(holder.image)
+        if(command==Constants.COMISSION){
+            priceFetch(holder,items[position])
+            holder.commision_portion.visibility=View.VISIBLE
+        }
     }
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
@@ -64,8 +71,62 @@ class OrderItemAdapter(
         var code=view.findViewById<TextView>(R.id.orderitem_code)
         var root=view.findViewById<CardView>(R.id.orderitem_root)
         val quantity=view.findViewById<TextView>(R.id.orderitem_quantity)
+        val profit=view.findViewById<TextView>(R.id.orderitem_profit)
+        val actualprice=view.findViewById<TextView>(R.id.orderitem_actual_price)
+        val commision_portion=view.findViewById<LinearLayout>(R.id.orderitem_comission_portion)
     }
 }
 interface orderItemFunctions{
     fun itemClick(itemId: String)
+}
+fun priceFetch(holder: OrderItemAdapter.ViewHolder,orderItem: OrderItem) {
+    val user_id= RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
+    val item_id= RequestBody.create(MediaType.parse("text/plain"), orderItem.item_id)
+    RetrofitClient.getApiHolder().getDiscountByUser(user_id,item_id).enqueue(object:Callback<RetrofitDiscount>{
+        override fun onResponse(call: Call<RetrofitDiscount>, response: Response<RetrofitDiscount>) {
+            if(response.code()==Constants.code_OK){
+                if(response.body()!!.data[0].discount_type == Constants.PRICE){
+                    val disc=response.body()!!.data[0].amount
+                    val amount=orderItem.actual_price.toFloat()-disc.toFloat()
+                    holder.actualprice.text=amount.toString()
+                    val profit={amount-orderItem.price.toFloat()}.toString()
+                    holder.profit.text=profit
+                }else{
+                    val disc=response.body()!!.data[0].amount
+                    val amount="0.${disc}".toFloat() * orderItem.actual_price.toFloat()
+                    holder.actualprice.text=amount.toString()
+                }
+            }else if(response.code()==Constants.code_NO_CONTENT){
+                if(orderItem.parent.isNotBlank()){
+                    val item_id= RequestBody.create(MediaType.parse("text/plain"), orderItem.parent)
+                    RetrofitClient.getApiHolder().getDiscountByUser(user_id,item_id).enqueue(object:Callback<RetrofitDiscount>{
+                        override fun onResponse(call: Call<RetrofitDiscount>, response: Response<RetrofitDiscount>) {
+                            if(response.code()==Constants.code_OK){
+                                if(response.body()!!.data[0].discount_type == Constants.PRICE){
+                                    val disc=response.body()!!.data[0].amount
+                                    val amount=orderItem.actual_price.toFloat()-disc.toFloat()
+                                    holder.actualprice.text=amount.toString()
+                                    val profit={amount-orderItem.price.toFloat()}.toString()
+                                    holder.profit.text=profit
+                                }else{
+                                    val disc=response.body()!!.data[0].amount
+                                    val amount="0.${disc}".toFloat() * orderItem.actual_price.toFloat()
+                                    holder.actualprice.text=amount.toString()
+                                }
+                            }
+                            Log.d("TAG","getdiscountByUser:"+response.code().toString())
+                        }
+                        override fun onFailure(call: Call<RetrofitDiscount>, t: Throwable) {
+                            Log.d("TAG","getdiscountByUser:"+t.localizedMessage)
+                        }
+                    })
+                }
+
+            }
+            Log.d("TAG","getdiscountByUser:"+response.code().toString())
+        }
+        override fun onFailure(call: Call<RetrofitDiscount>, t: Throwable) {
+            Log.d("TAG","getdiscountByUser:"+t.localizedMessage)
+        }
+    })
 }

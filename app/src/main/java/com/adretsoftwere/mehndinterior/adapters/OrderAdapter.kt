@@ -1,7 +1,6 @@
 package com.adretsoftwere.mehndinterior.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
-import com.adretsoftwere.mehndinterior.daos.MySharedStorage
-import com.adretsoftwere.mehndinterior.models.CartItem
 import com.adretsoftwere.mehndinterior.models.Order
-import com.bumptech.glide.Glide
 
 
 class OrderAdapter(
@@ -24,11 +19,8 @@ class OrderAdapter(
 
     var listener:orderFunctions
     var items= arrayListOf<Order>()
-    lateinit var layoutInflater: LayoutInflater
-    lateinit var context: Context
+
     init {
-        this.layoutInflater=layoutInflater
-        this.context=applicationContext
         this.listener=listener
     }
 

@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
-import com.adretsoftwere.mehndinterior.databinding.UserOptionsFragviewBinding
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.models.Item
 import com.bumptech.glide.Glide
 
@@ -24,15 +22,9 @@ class ItemAdapter(
 
     var listener:itemFunctions
     var items= arrayListOf<Item>()
-    var z=""
-    lateinit var layoutInflater: LayoutInflater
-    lateinit var context: Context
-    init {
-        this.layoutInflater=layoutInflater
-        this.context=applicationContext
-        this.listener=listener
-        this.z=z
 
+    init {
+        this.listener=listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -60,7 +52,7 @@ class ItemAdapter(
         holder.root.setOnClickListener(View.OnClickListener {
             listener.ItemClickFunc(items[position],it)
         })
-        val url=ApiConstants.apiUrl+ApiConstants.imageUrl+items[position].image_url
+        val url=Constants.apiUrl+Constants.imageUrl+items[position].image_url
         Log.d("TAG",url)
         Glide.with(holder.itemView.context).load(url).into(holder.image)
     }

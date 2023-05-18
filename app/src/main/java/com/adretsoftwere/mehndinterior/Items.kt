@@ -8,7 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.ItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.itemFunctions
-import com.adretsoftwere.mehndinterior.daos.ApiConstants
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityItemsBinding
 import com.adretsoftwere.mehndinterior.models.Item
@@ -37,7 +37,7 @@ class Items : AppCompatActivity(),itemFunctions {
 
         RetrofitClient.getApiHolder().getItems().enqueue(object:Callback<RetrofitItem>{
             override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
-                if(response.code()==ApiConstants.code_OK){
+                if(response.code()==Constants.code_OK){
                     Log.d("TAG",response.code().toString())
                     adapter.update(response.body()!!.data)
                 }else {
@@ -62,7 +62,7 @@ class Items : AppCompatActivity(),itemFunctions {
                          call: Call<RetrofitItem>,
                          response: Response<RetrofitItem>
                      ) {
-                         if (response.code() == ApiConstants.code_OK)
+                         if (response.code() == Constants.code_OK)
                              adapter.update(response.body()!!.data)
                          else {
                              Log.d("TAG", response.code().toString())

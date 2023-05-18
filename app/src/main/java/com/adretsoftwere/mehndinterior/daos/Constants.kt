@@ -1,6 +1,6 @@
 package com.adretsoftwere.mehndinterior.daos
 
-object ApiConstants{
+object Constants{
 
     val apiUrl="https://d31b-103-121-156-102.ngrok-free.app/"
     val imageUrl="assets/"
@@ -18,5 +18,7 @@ object ApiConstants{
     val WHOLESALER="Wholesaler"
     val RETAILER="Retailer"
     val AGENT="Agent"
-
+    val COMISSION="comission"
+    val PRICE = "price"
+    val PERCENTAGE = "percentage"
 }

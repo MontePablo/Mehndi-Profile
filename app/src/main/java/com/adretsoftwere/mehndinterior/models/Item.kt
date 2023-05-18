@@ -1,6 +1,6 @@
 package com.adretsoftwere.mehndinterior.models
 
-class Item(name:String="",imageurl:String="",price:String="") {
+open class Item(name:String="",imageurl:String="",price:String="") {
     var item_id=""
     var name=""
     var code=""
