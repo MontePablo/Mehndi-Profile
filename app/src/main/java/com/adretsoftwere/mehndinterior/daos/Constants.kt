@@ -21,4 +21,6 @@ object Constants{
     val COMISSION="comission"
     val PRICE = "price"
     val PERCENTAGE = "percentage"
+    val DELIVERED="Delivered"
+    val CONFIRMED="Confirmed"
 }
