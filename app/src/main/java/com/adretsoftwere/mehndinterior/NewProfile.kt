@@ -49,7 +49,7 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             else{
                 val user=User()
                 user.let {
-                    it.name=name;it.email=email;it.mobile=number;it.address=address;it.parent=parentUser.id
+                    it.name=name;it.email=email;it.mobile=number;it.address=address;it.parent=parentUser.user_id
                     it.password=password
                 }
                 RetrofitClient.getApiHolder().setUser(user).enqueue(object:Callback<RetrofitResponse>{

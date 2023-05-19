@@ -81,6 +81,7 @@ class ItemDetail : AppCompatActivity() {
         cart.user_id=MySharedStorage.getUserId()
         if(price!=0F){
             cart.price=price.toString()
+            cart.total_price=cart.price
         }
         cart.quantity="1"
         RetrofitClient.getApiHolder().setCart(cart).enqueue(object :

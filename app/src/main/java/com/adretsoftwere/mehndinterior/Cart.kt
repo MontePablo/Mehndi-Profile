@@ -27,6 +27,7 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     lateinit var binding:ActivityCartBinding
     lateinit var adapter: CartItemAdapter
     lateinit var items:ArrayList<CartItem>
+    var price=0F
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityCartBinding.inflate(layoutInflater)
@@ -38,43 +39,66 @@ class Cart : AppCompatActivity(), cartItemFunctions {
         binding.continueBtn.setOnClickListener { placeOrder() }
     }
 
-    override fun deleteItem(userId: String, itemId: String, position: Int) {
-        deleteCart(userId,itemId)
+    override fun deleteItem(position: Int) {
+        deleteCart(items[position].user_id,items[position].item_id)
         items.removeAt(position)
-        adapter.update(items)
+        updateData()
     }
 
-    override fun increaseQuantity(userId: String, itemId: String, position: Int,quant:String) {
-        val quantity=RequestBody.create(MediaType.parse("text/plain"),quant)
-        val type=RequestBody.create(MediaType.parse("text/plain"),Constants.INCREASE)
-        val user_id=RequestBody.create(MediaType.parse("text/plain"),userId)
-        val item_id=RequestBody.create(MediaType.parse("text/plain"),itemId)
-        RetrofitClient.getApiHolder().increaseCart(item_id,user_id,quantity,type).enqueue(object : Callback<RetrofitResponse>{
+    override fun increaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int) {
+        items[position].quantity={items[position].quantity.toFloat()+1}.toString()
+        val quantity=RequestBody.create(MediaType.parse("text/plain"),items[position].quantity)
+        val user_id=RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
+        val item_id=RequestBody.create(MediaType.parse("text/plain"),items[position].item_id)
+        items[position].total_price={items[position].quantity.toFloat()*items[position].price.toFloat()}.toString()
+        val total_price=RequestBody.create(MediaType.parse("text/plain"),items[position].total_price)
+        price+=items[position].price.toFloat()
+        updateData()
+        RetrofitClient.getApiHolder().increaseCart(item_id,user_id,quantity,total_price).enqueue(object : Callback<RetrofitResponse>{
             override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                 Log.d("TAG","increaseCart:"+response.code().toString())
-                items[position].quantity=quant
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","increaseCart:"+t.localizedMessage)
             }
         })
     }
+    fun updateData(){
+        binding.amount.text=price.toString()
+        adapter.update(items)
+    }
 
-    override fun decreaseQuantity(userId: String, itemId: String,position: Int,quant:String ) {
-        val quantity=RequestBody.create(MediaType.parse("text/plain"),quant)
-        val type=RequestBody.create(MediaType.parse("text/plain"),Constants.DECREASE)
-        val user_id=RequestBody.create(MediaType.parse("text/plain"),userId)
-        val item_id=RequestBody.create(MediaType.parse("text/plain"),itemId)
-        RetrofitClient.getApiHolder().decreaseCart(item_id,user_id,quantity,type)
-            .enqueue(object : Callback<RetrofitResponse>{
-                override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                    Log.d("TAG","increaseCart:"+response.code().toString())
-                    items[position].quantity=quant
-                }
-                override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-                    Log.d("TAG","increaseCart:"+t.localizedMessage)
-                }
-            })
+    override fun decreaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int) {
+        if(items[position].quantity.toInt()!=1) {
+            items[position].quantity={items[position].quantity.toFloat()-1}.toString()
+            val quantity =
+                RequestBody.create(MediaType.parse("text/plain"), items[position].quantity)
+            val user_id =
+                RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
+            val item_id = RequestBody.create(MediaType.parse("text/plain"), items[position].item_id)
+            items[position].total_price =
+                { items[position].quantity.toFloat() * items[position].price.toFloat() }.toString()
+            val total_price =
+                RequestBody.create(MediaType.parse("text/plain"), items[position].total_price)
+            price -= items[position].price.toFloat()
+            updateData()
+            RetrofitClient.getApiHolder()
+                .decreaseCart(item_id, user_id, quantity, total_price)
+                .enqueue(object : Callback<RetrofitResponse> {
+                    override fun onResponse(
+                        call: Call<RetrofitResponse>,
+                        response: Response<RetrofitResponse>
+                    ) {
+                        Log.d("TAG", "increaseCart:" + response.code().toString())
+                    }
+
+                    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                        Log.d("TAG", "increaseCart:" + t.localizedMessage)
+                    }
+                })
+        }else{
+            deleteItem(position)
+        }
     }
 
     fun loadData(){
@@ -85,7 +109,11 @@ class Cart : AppCompatActivity(), cartItemFunctions {
                 if(response.code()==Constants.code_OK){
                     binding.empty.visibility= View.GONE
                     items=response.body()!!.data
-                    adapter.update(items)
+
+                    for(item in items){
+                        price+=item.total_price.toFloat()
+                    }
+                    updateData()
 
                 }else if(response.code()==Constants.code_NO_CONTENT){
                     binding.empty.visibility= View.VISIBLE
@@ -119,14 +147,13 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     }
     fun placeOrder(){
         val order= Order()
-        var price=0F
         order.order_id=System.currentTimeMillis().toString()
         val calendar: Calendar = Calendar.getInstance() // Returns instance with current date and time set
         val formatter = SimpleDateFormat("yyyy-dd-MM")
         order.date=formatter.format(calendar.time)
         for(item in items) {
             order.name = item.name + ","
-            price += item.price.toFloat()
+            price += item.total_price.toFloat()
             val user_id = RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
             RetrofitClient.getApiHolder().deleteWholeCart(user_id)
                 .enqueue(object : Callback<RetrofitResponse> {

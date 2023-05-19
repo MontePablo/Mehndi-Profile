@@ -57,7 +57,7 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
     }
 
     override fun itemClick(user: User) {
-        val user_id=RequestBody.create(MediaType.parse("text/plain"),user.id)
+        val user_id=RequestBody.create(MediaType.parse("text/plain"),user.user_id)
         RetrofitClient.getApiHolder().getOrder(user_id).enqueue(object:Callback<RetrofitOrder>{
             override fun onResponse(call: Call<RetrofitOrder>, response: Response<RetrofitOrder>) {
                 if(response.code()==Constants.code_OK){

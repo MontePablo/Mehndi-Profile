@@ -19,13 +19,13 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
-    lateinit var user_type:String
+     var user_type:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
-        user_type =intent.getStringExtra("user_type")!!
+        user_type =intent.getStringExtra("user_type")
         binding.shop.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext, Items::class.java))
         })

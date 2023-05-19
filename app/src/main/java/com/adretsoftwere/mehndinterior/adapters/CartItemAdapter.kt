@@ -47,19 +47,14 @@ class CartItemAdapter(
         holder.name.text=items[position].name
         holder.price.text=items[position].price
         holder.increase.setOnClickListener(View.OnClickListener {
-            holder.quantity.text=(holder.quantity.text.toString().toInt()+1).toString()
-            listener.increaseQuantity(items[position].user_id,items[position].item_id,position,holder.quantity.text.toString())
+            listener.increaseQuantity(holder,position)
         })
         holder.decrease.setOnClickListener(View.OnClickListener {
-            if(items[position].quantity.toInt()>1) {
-                holder.quantity.text = (holder.quantity.text.toString().toInt() - 1).toString()
-                listener.decreaseQuantity(MySharedStorage.getUserId(), items[position].item_id,position,holder.quantity.text.toString())
-            }else{
-                listener.deleteItem(items[position].user_id,items[position].item_id,position)
-            }
+            listener.decreaseQuantity(holder,position)
+
         })
         holder.delete.setOnClickListener(View.OnClickListener {
-            listener.deleteItem(MySharedStorage.getUserId(),items[position].item_id, position)
+            listener.deleteItem(position)
         })
         val url=Constants.apiUrl+Constants.imageUrl+items[position].image_url
         Log.d("TAG",url)
@@ -80,7 +75,7 @@ class CartItemAdapter(
     }
 }
 interface cartItemFunctions{
-    fun deleteItem(userId: String, itemId: String,position: Int)
-    fun increaseQuantity(userId: String, itemId: String, position: Int,quantity: String)
-    fun decreaseQuantity(userId: String, itemId: String, position: Int, quantity: String)
+    fun deleteItem(position:Int)
+    fun increaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int)
+    fun decreaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int)
 }

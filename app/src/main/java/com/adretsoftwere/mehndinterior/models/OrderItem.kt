@@ -12,6 +12,7 @@ class OrderItem: CartItem() {
         this.image_url=cartItem.image_url
         this.name=cartItem.name
         this.actual_price=cartItem.actual_price
+        this.total_price=cartItem.total_price
     }
 
 }

@@ -22,6 +22,7 @@ import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityNewItemBinding
 import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
+import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -241,8 +242,22 @@ class NewItem : AppCompatActivity(), itemFunctions {
     }
     fun func(){
         adapter= ItemAdapter(this, layoutInflater, applicationContext)
+        RetrofitClient.getApiHolder().getItems().enqueue(object:Callback<RetrofitItem>{
+            override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
+                if(response.code()==Constants.code_OK){
+                    Log.d("TAG",response.code().toString())
+                    adapter.update(response.body()!!.data)
+                }else {
+                    Log.d("TAG 2",response.code().toString() + response.message().toString())
+                }
+            }
 
-        adapter.update(FakeData.dataset)
+            override fun onFailure(call: Call<RetrofitItem>, t: Throwable) {
+                Log.d("TAG","on failure retro : ${t.localizedMessage}")
+
+            }
+
+        })
         binding.recylerView.adapter=adapter
         binding.recylerView.layoutManager=
             GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)

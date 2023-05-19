@@ -26,7 +26,7 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
         super.onCreate(savedInstanceState)
         binding= ActivityOrderDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        adapter= OrderItemAdapter(this,layoutInflater,this)
+        adapter= OrderItemAdapter(this)
         order= Gson().fromJson(intent.getStringExtra("order"), Order::class.java)
         binding.recylerView.layoutManager=LinearLayoutManager(this)
         binding.recylerView.adapter=adapter

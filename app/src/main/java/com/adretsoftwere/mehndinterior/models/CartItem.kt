@@ -3,6 +3,7 @@ package com.adretsoftwere.mehndinterior.models
 open class CartItem:Item() {
     var actual_price=""
     var user_id=""
+    var total_price=""
     fun fromItem(item: Item){
         this.item_id=item.item_id
         this.quantity=item.quantity
