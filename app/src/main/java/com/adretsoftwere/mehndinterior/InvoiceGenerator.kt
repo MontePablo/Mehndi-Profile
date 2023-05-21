@@ -225,11 +225,11 @@ class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
 
         lastTable.addCell(Cell().setBorder(Border.NO_BORDER).add(Paragraph("Pay ToBank Name: AXIS BANK, RAJPUR\n" +
                 "Bank Account No.:\n" +
-                "922020012624167\n" +
-                "Bank IFSC code: UTIB0001481\n" +
+                "922020012624167\n\n" +
+                "Bank IFSC code: UTIB0001481\n\n" +
                 "Account Holder's Name: MEHNDI\n" +
                 "INTERIOR")))
-        lastTable.addCell(Cell().setBorder(Border.NO_BORDER).add(Paragraph("For, MEHNDI PROFILE INDUSTRIES PVT. LTD.\n\n\n" +
+        lastTable.addCell(Cell().setBorder(Border.NO_BORDER).add(Paragraph("For, MEHNDI PROFILE INDUSTRIES PVT. LTD.\n\n\n\n\n" +
                 "Authorized Signatory\n")))
 
         document.add(lastTable)

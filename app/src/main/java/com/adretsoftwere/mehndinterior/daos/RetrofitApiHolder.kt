@@ -3,6 +3,7 @@ package com.adretsoftwere.mehndinterior.daos
 import com.adretsoftwere.mehndinterior.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.bouncycastle.cert.ocsp.Req
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -114,6 +115,8 @@ interface RetrofitApiHolder {
     @GET("order.php")
     fun getOrder(@Part("user_id") user_id: RequestBody):Call<RetrofitOrder>
 
+    @POST("update_order.php")
+    fun updateOrderStatus(@Part("order_id") order_id:RequestBody,@Part("status") status:RequestBody):Call<RetrofitResponse>
 
 
 
