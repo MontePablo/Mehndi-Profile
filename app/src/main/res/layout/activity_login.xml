@@ -115,7 +115,7 @@
             app:layout_constraintTop_toBottomOf="@id/password"
             app:layout_constraintWidth_percent="0.80" />
         <Button
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -30,9 +30,11 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.MehndiInterior" />
+            android:theme="@style/Theme.MehndiInterior" >
+
+        </activity>
         <activity
             android:name=".Cart"
             android:exported="false" />
@@ -49,11 +51,7 @@
         <activity
             android:name=".SplashScreen"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".NewProfile"
@@ -66,7 +64,13 @@
             android:exported="false" />
         <activity
             android:name=".Login"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

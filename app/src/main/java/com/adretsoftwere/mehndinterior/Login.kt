@@ -79,7 +79,7 @@ class Login : AppCompatActivity() {
                 user.address="Madarat,Baruipur"
                 order.date="2023-10-4"
                 order.order_id="64226926262"
-                order.price="23000"
+                order.price="11000"
                 val c=OrderItem().apply {
                     code="ASD-32"
                     item_id="465426262"
@@ -94,14 +94,9 @@ class Login : AppCompatActivity() {
                 items.add(c)
                 items.add(c)
                 items.add(c)
-                items.add(c)
-                items.add(c)
-                items.add(c)
-                items.add(c)
-                items.add(c)
 
             }
-            InvoiceGenerator(data)
+            InvoiceGenerator(this,data)
 
         }
     }
