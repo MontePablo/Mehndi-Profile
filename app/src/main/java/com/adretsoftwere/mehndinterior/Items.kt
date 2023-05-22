@@ -55,7 +55,7 @@ class Items : AppCompatActivity(),itemFunctions {
 
     override fun ItemClickFunc(item: Item, view: View) {
         val parent= RequestBody.create(MediaType.parse("text/plain"),item.item_id)
-         if(item.price.isBlank()) {
+         if(item.price.isNullOrBlank()) {
              RetrofitClient.getApiHolder().getItemsByParent(parent)
                  .enqueue(object : Callback<RetrofitItem> {
                      override fun onResponse(

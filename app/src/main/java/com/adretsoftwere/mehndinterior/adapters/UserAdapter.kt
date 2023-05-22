@@ -13,13 +13,17 @@ import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.User
 
 class UserAdapter(listener:userFunctions): RecyclerView.Adapter<UserAdapter.ViewHolder>() {
-    lateinit var listener:userFunctions
-    lateinit var users:ArrayList<User>
+    var listener:userFunctions
+    var users= (arrayListOf <User>())
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view= LayoutInflater.from(parent.context).inflate(R.layout.customview_user,parent,false)
         val vh= UserAdapter.ViewHolder(view)
         return vh
+    }
+    init {
+        this.listener=listener
     }
     fun update(users:ArrayList<User>){
         this.users=users

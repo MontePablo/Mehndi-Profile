@@ -278,6 +278,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
             override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                 Log.d("TAG","upload success ${response.code()}")
                 Toast.makeText(applicationContext,"uploaded!",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(applicationContext,Items::class.java))
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","upload failed ${t.localizedMessage}")
@@ -295,6 +296,8 @@ class NewItem : AppCompatActivity(), itemFunctions {
         }
         item.name=binding.name.text.toString()
         item.code=binding.code.text.toString()
+        item.about=binding.about.text.toString()
+        item.features=binding.features.text.toString()
         item.price=binding.price.text.toString()
         item.quantity=binding.quantity.text.toString()
         item.image_url=mainImage

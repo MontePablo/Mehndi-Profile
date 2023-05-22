@@ -23,7 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    var accountType="Manufacturer"
+    var accountType=Constants.MANUFACTURER
     lateinit var parentUser:User
     lateinit var binding:ActivityNewProfileBinding
     lateinit var users:ArrayList<User>
@@ -34,9 +34,9 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         window.statusBarColor=getColor(R.color.sixty1)
         loadParents()
         val list= listOf<String>(Constants.DISTRIBUTER,Constants.AGENT,Constants.MANUFACTURER,Constants.RETAILER,Constants.WHOLESALER)
-        val shapeAdapter: ArrayAdapter<*>
-        shapeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
-        binding.spinnerAccountType.adapter=shapeAdapter
+        val typeAdapter: ArrayAdapter<*>
+        typeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
+        binding.spinnerAccountType.adapter=typeAdapter
         binding.spinnerAccountType.onItemSelectedListener=this
         binding.searchUserText.setOnClickListener(View.OnClickListener { funcUserSpin() })
 
@@ -44,28 +44,29 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             val name=binding.name.text.toString();val email=binding.email.text.toString();val number=binding.mobile.text.toString()
             val address=binding.address.text.toString()
             val password=binding.password.text.toString()
+
+
+
             if(name.isBlank() || email.isBlank() || number.isBlank() || password.isBlank() )
                 Toast.makeText(applicationContext,"fill all fields first!",Toast.LENGTH_SHORT).show()
             else{
                 val user=User()
                 user.let {
-                    it.name=name;it.email=email;it.mobile=number;it.address=address;it.parent=parentUser.user_id
-                    it.password=password
-                }
-                RetrofitClient.getApiHolder().setUser(user).enqueue(object:Callback<RetrofitResponse>{
-                    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        if(response.code()==Constants.code_OK){
-                            Log.d("TAG",response.code().toString())
-                            Toast.makeText(applicationContext,"created! succesfully!",Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(applicationContext,Users::class.java))
-                            finish()
-                        }else {
-                            Log.d("TAG 2",response.code().toString() + response.message().toString())
+                    it.user_type=accountType
+                    it.name=name;it.email=email;it.mobile=number;it.address=address;
+                    it.password=password;it.user_id=System.currentTimeMillis().toString()
+
+                    if(accountType!=Constants.MANUFACTURER){
+                        if(parentUser!=null){
+                            it.parent=parentUser.user_id
+                            createUser(user)
+                        }else{
+                            Toast.makeText(applicationContext,"select parent first!",Toast.LENGTH_SHORT).show()
                         }
+                    }else{
+                        createUser(user)
                     }
-                    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-                        Log.d("TAG","on failure retro : ${t.localizedMessage}")
-                    }})
+                }
             }
         })
     }
@@ -73,6 +74,22 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         accountType=p0?.selectedItem.toString()
 
+    }
+    fun createUser(user:User){
+        RetrofitClient.getApiHolder().setUser(user).enqueue(object:Callback<RetrofitResponse>{
+            override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                if(response.code()==Constants.code_CREATED){
+                    Log.d("TAG",response.code().toString())
+                    Toast.makeText(applicationContext,"created! succesfully!",Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext,Users::class.java))
+                    finish()
+                }else {
+                    Log.d("TAG 2",response.code().toString() + response.message().toString())
+                }
+            }
+            override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                Log.d("TAG","on failure retro : ${t.localizedMessage}")
+            }})
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

@@ -14,11 +14,9 @@ class SplashScreen : AppCompatActivity() {
 
         window.statusBarColor=getColor(R.color.white)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
+//        actionBar?.hide()
         MySharedStorage.func(applicationContext)
 
-        if(MySharedStorage.getUserId().isBlank())
-//        actionBar?.hide()
         Handler().postDelayed({
             if(MySharedStorage.getUserId().isBlank())
                 startActivity(Intent(applicationContext, Login::class.java))

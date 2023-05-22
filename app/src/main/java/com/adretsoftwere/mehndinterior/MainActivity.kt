@@ -11,21 +11,37 @@ import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMainBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitImage
+import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding:ActivityMainBinding
-     var user_type:String? = null
+     lateinit var user_type:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
-        user_type =intent.getStringExtra("user_type")
+        user_type =MySharedStorage.getUserType()
+        saveUser()
+        Log.d("TAG","gg"+user_type)
+        if(user_type==Constants.MANUFACTURER){
+            binding.grid.removeView(binding.orders)
+            binding.grid.removeView(binding.shop)
+        }else{
+            binding.grid.removeView(binding.manageItems)
+            binding.grid.removeView(binding.manageUsers)
+            binding.grid.removeView(binding.newItem)
+
+        }
+
+
         binding.shop.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext, Items::class.java))
         })
@@ -38,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
         binding.orders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
 
-        binding.logout.setOnClickListener { MySharedStorage.setUserId("") }
+        binding.logout.setOnClickListener { MySharedStorage.setUserId("");startActivity(Intent(applicationContext,Login::class.java)); finish() }
 
         var slideAdapter= SliderAdapter()
         binding.sliderView.setSliderAdapter(slideAdapter)
@@ -59,6 +75,18 @@ class MainActivity : AppCompatActivity() {
                 Log.d("TAG",t.localizedMessage)
             }
         })
-
+    }
+    fun saveUser(){
+        val mob= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
+        RetrofitClient.getApiHolder().searchUserByMobile(mob).enqueue(object : Callback<RetrofitUser> {
+            override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
+                if(response.code()== Constants.code_OK)
+                    MySharedStorage.saveUser(response.body()!!.data[0])
+                Log.d("TAG",response.code().toString())
+            }
+            override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
+                Log.d("TAG",t.localizedMessage)
+            }
+        })
     }
 }

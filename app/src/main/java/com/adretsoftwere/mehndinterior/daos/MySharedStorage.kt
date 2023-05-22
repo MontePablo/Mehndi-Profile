@@ -2,15 +2,13 @@ package com.adretsoftwere.mehndinterior.daos
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Handler
 import android.preference.PreferenceManager
+import com.adretsoftwere.mehndinterior.models.User
 
 object MySharedStorage {
     lateinit var context: Context
     lateinit var preference: SharedPreferences
-    private var loginId = ""
-    private var password = ""
-
+    lateinit var user:User
     lateinit var editor: SharedPreferences.Editor
 
 
@@ -21,21 +19,26 @@ object MySharedStorage {
     }
 
     fun getUserId(): String {
-//        return  preference.getString("user_id", null)!!
-       return ""
+        return  preference.getString("user_id", null)!!
+    }
+    fun saveUser(user:User){
+        this.user=user
+    }
+    fun getUserr():User{
+        return user
     }
 
     fun setUserId(data: String) {
-//        editor.putString("user_id", data)
-//        editor.apply()
+        editor.putString("user_id", data)
+        editor.apply()
     }
     fun getUserType(): String {
         return  preference.getString("user_type", null)!!
     }
 
     fun setUserType(data: String) {
-//        editor.putString("user_type", data)
-//        editor.apply()
+        editor.putString("user_type", data)
+        editor.apply()
     }
 //    fun getLoginId():String{
 //        user_id = preference.getString("user_id",null)!!

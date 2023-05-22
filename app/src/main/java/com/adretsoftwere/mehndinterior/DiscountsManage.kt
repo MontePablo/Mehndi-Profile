@@ -61,7 +61,7 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
         dialogBuilder.setView(viewBinding.root)
         val dialog=dialogBuilder.create()
         dialog.show()
-        if(MySharedStorage.getUserId().isBlank()){
+        if(MySharedStorage.getUserId().isNotBlank()){
             getDiscount(MySharedStorage.getUserId(),item.item_id,viewBinding,dialog,item)
         }
     }
@@ -134,11 +134,14 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
             Log.d("TAG",item.item_id + item.name)
             RetrofitClient.getApiHolder().getItemsByParent(parent).enqueue(object : Callback<RetrofitItem>{
                 override fun onResponse(call: Call<RetrofitItem>, response: Response<RetrofitItem>) {
-                    if(response.code()==Constants.code_OK)
+                    if(response.code()==Constants.code_OK) {
                         adapter.update(response.body()!!.data)
-                    else{
-                        Log.d("TAG","getItembyParent:"+response.code().toString())
+                        dialog.dismiss()
                     }
+                    else if(response.code()==Constants.code_NO_CONTENT){
+                        Toast.makeText(applicationContext,"no items present!",Toast.LENGTH_SHORT).show()
+                    }
+                    Log.d("TAG","getItembyParent:"+response.code().toString())
                 }
                 override fun onFailure(call: Call<RetrofitItem>, t: Throwable) {
                     Log.d("TAG","getItembyParent:"+t.localizedMessage)

@@ -1,19 +1,20 @@
 package com.adretsoftwere.mehndinterior
+
+import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.core.graphics.drawable.toBitmap
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import com.adretsoftwere.mehndinterior.models.InvoiceData
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.DeviceRgb
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfName.Image
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.borders.Border
@@ -23,10 +24,10 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.properties.HorizontalAlignment
 import com.itextpdf.layout.properties.TextAlignment
-import com.itextpdf.layout.properties.VerticalAlignment
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+
 
 class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
     lateinit var orderId:String
@@ -235,5 +236,21 @@ class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
         document.add(lastTable)
 
         document.close()
+
+
+
+
+
+//        val pdfFile = File(pdfpath, "namePdfFile.pdf") //File path
+        if (file.exists()) //Checking if the file exists or not
+        {
+            val path = Uri.fromFile(file)
+            val objIntent = Intent(Intent.ACTION_VIEW)
+            objIntent.setDataAndType(path, "application/pdf")
+            objIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(activity,objIntent,null) //Starting the pdf viewer
+        } else {
+            Toast.makeText(activity, "The file not exists! ", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.adretsoftwere.mehndinterior.daos
 import com.adretsoftwere.mehndinterior.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.bouncycastle.cert.ocsp.Req
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,7 +22,7 @@ interface RetrofitApiHolder {
     @POST("item.php")
     fun sendItem(@Body item: Item): Call<RetrofitResponse>
     @Multipart
-    @GET("item_by_parent.php")
+    @POST("item_by_parent.php")
     fun getItemsByParent(@Part("parent") parent:RequestBody): Call<RetrofitItem>
 
 
@@ -36,8 +35,8 @@ interface RetrofitApiHolder {
     fun imageUpload(@Part image:MultipartBody.Part,@Part("id") id:RequestBody):Call<RetrofitResponse>
 
     @Multipart
-    @GET("item_image_download.php")
-    fun itemImageDownload(@Part("id") id:RequestBody):Call<RetrofitImage>
+    @POST("item_image_download.php")
+    fun itemImageDownload(@Part("item_id") id:RequestBody):Call<RetrofitImage>
 
     @GET("banner_image_download.php")
     fun bannerImageDownload():Call<RetrofitImage>
@@ -51,7 +50,7 @@ interface RetrofitApiHolder {
 
 
     @Multipart
-    @GET("discount.php")
+    @POST("get_discount.php")
     fun getDiscountByUser(@Part("user_id") user_id:RequestBody,@Part("item_id") item_id:RequestBody): Call<RetrofitDiscount>
 
 
@@ -71,10 +70,12 @@ interface RetrofitApiHolder {
     @GET("user.php")
     fun getUser(): Call<RetrofitUser>
     @Multipart
-    @GET("search_user_by_parent.php")
+    @POST("search_user_by_parent.php")
     fun getUserByParent(@Part("parent") parent:RequestBody): Call<RetrofitUser>
-    @POST("search_user.php")
-    fun searchUser(@Body user: User): Call<RetrofitUser>
+
+    @Multipart
+    @POST("search_user_by_mobile.php")
+    fun searchUserByMobile(@Part("mobile") mobile: RequestBody): Call<RetrofitUser>
 
 
 
@@ -85,7 +86,7 @@ interface RetrofitApiHolder {
     @POST("cart.php")
     fun setCart(@Body cart:CartItem): Call<RetrofitResponse>
     @Multipart
-    @GET("cart.php")
+    @POST("get_cart.php")
     fun getCart(@Part("user_id") user_id:RequestBody): Call<RetrofitCartItem>
 
     @Multipart
@@ -112,7 +113,7 @@ interface RetrofitApiHolder {
     @POST("order.php")
     fun setOrder(@Body order:Order):Call<RetrofitResponse>
     @Multipart
-    @GET("order.php")
+    @POST("get_order.php")
     fun getOrder(@Part("user_id") user_id: RequestBody):Call<RetrofitOrder>
 
     @POST("update_order.php")
@@ -126,7 +127,7 @@ interface RetrofitApiHolder {
     fun setOrderItems(@Body orderItem:OrderItem): Call<RetrofitResponse>
 
     @Multipart
-    @GET("cart.php")
+    @POST("get_order_item.php")
     fun getOrderItems(@Part("order_id") order_id:RequestBody): Call<RetrofitOrderItem>
 
 

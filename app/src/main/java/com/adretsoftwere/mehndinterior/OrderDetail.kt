@@ -3,14 +3,16 @@ package com.adretsoftwere.mehndinterior
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adretsoftwere.mehndinterior.adapters.OrderItemAdapter
 import com.adretsoftwere.mehndinterior.adapters.orderItemFunctions
 import com.adretsoftwere.mehndinterior.daos.Constants
+import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityOrderDetailBinding
-import com.adretsoftwere.mehndinterior.models.Order
-import com.adretsoftwere.mehndinterior.models.RetrofitOrderItem
+import com.adretsoftwere.mehndinterior.models.*
 import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -20,6 +22,7 @@ import retrofit2.Response
 
 class OrderDetail : AppCompatActivity(),orderItemFunctions {
     lateinit var order: Order
+    lateinit var orderItems: ArrayList<OrderItem>
     lateinit var adapter:OrderItemAdapter
     lateinit var binding:ActivityOrderDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +34,7 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
         binding.recylerView.layoutManager=LinearLayoutManager(this)
         binding.recylerView.adapter=adapter
         loadData()
-
+        binding.confirmbtn.setOnClickListener { confirm() }
 
     }
     fun loadData(){
@@ -43,11 +46,19 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
         binding.invoicebtn.setOnClickListener { invoice() }
         binding.confirmbtn.setOnClickListener { confirm() }
         binding.cancelbtn.setOnClickListener { cancel() }
+
+        if(order.status!=Constants.CONFIRMED && MySharedStorage.getUserType()==Constants.MANUFACTURER)
+            binding.confirmbtn.visibility=View.VISIBLE
+        if(order.status==Constants.CONFIRMED)
+            binding.invoicebtn.visibility=View.VISIBLE
+        if(order.status!=Constants.DELIVERED)
+            binding.cancelbtn.visibility=View.VISIBLE
         val order_id=RequestBody.create(MediaType.parse("text/plain"), order.order_id)
         RetrofitClient.getApiHolder().getOrderItems(order_id).enqueue(object:Callback<RetrofitOrderItem>{
             override fun onResponse(call: Call<RetrofitOrderItem>, response: Response<RetrofitOrderItem>) {
                 if(response.code()==Constants.code_OK){
-                    adapter.update(response.body()!!.data)
+                    orderItems=response.body()!!.data
+                    adapter.update(orderItems)
                 }else
                     Log.d("TAG","getOrderITem:"+response.code())
             }
@@ -63,10 +74,29 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
     }
 
      fun invoice() {
-
+        Toast.makeText(applicationContext,"please hold on for a moment. Don't press back button",Toast.LENGTH_LONG).show()
+         val invoiceData=InvoiceData().apply {
+             this.items=orderItems
+             this.order=order
+             this.user=MySharedStorage.getUserr()
+         }
+         InvoiceGenerator(this,invoiceData)
     }
     fun confirm(){
-        //send comission
+        val order_id=RequestBody.create(MediaType.parse("text/plain"),order.order_id)
+        val status=RequestBody.create(MediaType.parse("text/plain"),Constants.CONFIRMED)
+
+        RetrofitClient.getApiHolder().updateOrderStatus(order_id,status).enqueue(object:Callback<RetrofitResponse>{
+            override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                Log.d("TAG","updateOrderStatus:"+response.code())
+                binding.confirmbtn.visibility= View.GONE
+                Toast.makeText(applicationContext,"Confirmed!",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                Log.d("TAG","updateOrderStatus:"+t.localizedMessage)
+            }
+        })
     }
     fun cancel(){
 

@@ -51,12 +51,30 @@
         android:id="@+id/features"
         android:layout_margin="10dp"/>
     <TextView
+        android:layout_margin="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/features"
+        android:id="@id/textview5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Code "/>
+    <TextView
+        android:layout_margin="10dp"
+        app:layout_constraintLeft_toRightOf="@id/textview5"
+        app:layout_constraintTop_toBottomOf="@id/features"
+        style="@style/myText3"
+        android:textStyle="bold"
+        android:id="@id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AHVPD-396 "/>
+    <TextView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/features"
+        app:layout_constraintTop_toBottomOf="@id/code"
         android:text="품절 (pumjeol) is another expression for sold out (매진 | maejin), coming from the hanja for product (품 | pum) and gone (절 | jeol). The words 품절남 (pumjeollam) and 품절녀 (pumjeollyeo) literally mean “sold-out man” and “sold-out woman,” they refer to somebody (a celebrity or popular friend) who has just got married and is therefore off the market for dating."/>
     <LinearLayout
         android:id="@+id/images"

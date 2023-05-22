@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     style="@style/myBackround"
     tools:context=".MainActivity">
+
 <ScrollView
+    android:layout_marginTop="65dp"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     android:layout_width="match_parent"
@@ -15,15 +17,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo"
-        android:layout_gravity="center"/>
+
     <com.smarteist.autoimageslider.SliderView
         android:id="@+id/sliderView"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,6 +39,7 @@
         app:sliderScrollTimeInSec="2"
         app:sliderStartAutoCycle="true" />
     <GridLayout
+        android:id="@+id/grid"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
@@ -141,7 +140,7 @@
 
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
-            android:id="@+id/commissions"
+            android:id="@+id/profits"
             android:layout_margin="5dp"
             app:cardElevation="15dp"
             app:cardCornerRadius="10sp"
@@ -163,7 +162,7 @@
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
                     style="@style/myText3"
-                    android:text="My Commision"
+                    android:text="My Profits"
                     android:textAllCaps="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -355,4 +354,11 @@
     </GridLayout>
 </LinearLayout>
 </ScrollView>
+    <ImageView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

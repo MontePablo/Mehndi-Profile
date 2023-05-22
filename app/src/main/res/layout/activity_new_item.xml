@@ -99,6 +99,30 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="About"/>
+            <EditText
+                android:layout_margin="10dp"
+                style="@style/myEdittext"
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                style="@style/myText4"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Item Features (type each feature in new line)"/>
+            <EditText
+                android:layout_margin="10dp"
+                style="@style/myEdittext"
+                android:id="@+id/features"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                style="@style/myText4"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Main image"/>
             <include android:id="@+id/mainImage"
                 layout="@layout/customview_image"/>

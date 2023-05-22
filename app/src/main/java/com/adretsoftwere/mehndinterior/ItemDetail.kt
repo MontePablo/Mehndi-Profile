@@ -10,6 +10,7 @@ import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityItemDetailBinding
+import com.adretsoftwere.mehndinterior.databinding.CustomviewItemImageBinding
 import com.adretsoftwere.mehndinterior.databinding.ItemSliderBinding
 import com.adretsoftwere.mehndinterior.models.*
 import com.bumptech.glide.Glide
@@ -59,6 +60,7 @@ class ItemDetail : AppCompatActivity() {
                     slideAdapter.updateData(response.body()!!.data)
                     imageLoad(response.body()!!.data)
                 }
+                Log.d("TAG","itemImageDownload:"+ response.code())
             }
 
             override fun onFailure(call: Call<RetrofitImage>, t: Throwable) {
@@ -68,9 +70,9 @@ class ItemDetail : AppCompatActivity() {
     }
     fun imageLoad(data: ArrayList<Image>) {
         for(i in data) {
-            val viewBinding = ItemSliderBinding.inflate(layoutInflater)
+            val viewBinding = CustomviewItemImageBinding.inflate(layoutInflater)
             val url=Constants.apiUrl+Constants.imageUrl+i
-            Glide.with(applicationContext).load(url).into(viewBinding.slideImage)
+            Glide.with(applicationContext).load(url).into(viewBinding.imageView)
             binding.images.addView(viewBinding.root)
         }
     }

@@ -14,6 +14,8 @@ import com.adretsoftwere.mehndinterior.models.InvoiceData
 import com.adretsoftwere.mehndinterior.models.OrderItem
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.adretsoftwere.mehndinterior.models.User
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,21 +27,18 @@ class Login : AppCompatActivity() {
         binding= ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
+        Log.d("TAG","ff"+MySharedStorage.getUserId())
+
 
         binding.signIn.setOnClickListener(View.OnClickListener {
             val user=User()
             if(binding.id.text.isBlank() || binding.password.text.isBlank()){
                 Toast.makeText(applicationContext,"fill all fields first",Toast.LENGTH_SHORT).show()
             }else{
-                val id=binding.id.text.toString()
+                val mobile=binding.id.text.toString()
                 val password=binding.password.text.toString()
-
-                if(id.contains("@")){
-                    user.email=id
-                }else{
-                    user.mobile=id
-                }
-                RetrofitClient.getApiHolder().searchUser(user).enqueue(object: Callback<RetrofitUser>{
+                val mob= RequestBody.create(MediaType.parse("text/plain"),mobile)
+                RetrofitClient.getApiHolder().searchUserByMobile(mob).enqueue(object: Callback<RetrofitUser>{
                     override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
                         if(response.code()==Constants.code_OK){
                             val fetchedUser=response.body()!!.data[0]
@@ -47,9 +46,7 @@ class Login : AppCompatActivity() {
                                 Toast.makeText(applicationContext,"welcome!",Toast.LENGTH_SHORT).show()
                                 MySharedStorage.setUserId(fetchedUser.user_id)
                                 MySharedStorage.setUserType(fetchedUser.user_type)
-                                val intent = Intent(applicationContext, MainActivity::class.java)
-                                intent.putExtra("user_type", fetchedUser.user_type)
-                                startActivity(intent)
+                                startActivity(Intent(applicationContext,MainActivity::class.java))
                                 finish()
                             }else{
                                 Toast.makeText(applicationContext,"wrong password!",Toast.LENGTH_SHORT).show()
@@ -57,10 +54,10 @@ class Login : AppCompatActivity() {
                         }else if(response.code()==Constants.code_NO_CONTENT){
                             Toast.makeText(applicationContext,"no user found!",Toast.LENGTH_SHORT).show()
                         }
-                        Log.d("TAG","searchUser:"+response.code())
+                        Log.d("TAG","searchUserByMobile:"+response.code())
                     }
                     override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
-                        Log.d("TAG","searchUser:"+t.localizedMessage)
+                        Log.d("TAG","searchUserByMobile:"+t.localizedMessage)
                     }
                 })
             }
