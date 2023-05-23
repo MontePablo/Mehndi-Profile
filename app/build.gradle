@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 
+    implementation 'id.zelory:compressor:3.0.1'
 
 
 }

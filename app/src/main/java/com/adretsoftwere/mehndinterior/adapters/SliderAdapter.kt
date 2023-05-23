@@ -29,7 +29,6 @@ class SliderAdapter(): SliderViewAdapter<SliderAdapter.ViewHolder>() {
     override fun onBindViewHolder(viewHolder: ViewHolder?, position: Int) {
 
         val url= Constants.apiUrl+ Constants.imageUrl+images[position].filename
-        Log.d("TAG",url)
         Glide.with(viewHolder?.imageView!!.context).load(url).into(viewHolder?.imageView!!)
     }
     class ViewHolder(itemView: View): SliderViewAdapter.ViewHolder(itemView){

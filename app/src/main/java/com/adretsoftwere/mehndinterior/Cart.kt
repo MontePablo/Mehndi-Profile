@@ -32,6 +32,8 @@ class Cart : AppCompatActivity(), cartItemFunctions {
         super.onCreate(savedInstanceState)
         binding= ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor=getColor(R.color.sixty1)
+
         adapter= CartItemAdapter(this,layoutInflater,this)
         loadData()
         binding.recyclerView.adapter=adapter
@@ -69,7 +71,7 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     }
 
     override fun decreaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int) {
-        if(items[position].quantity.toInt()!=1) {
+        if(items[position].quantity.toFloat()!=1F) {
             items[position].quantity={items[position].quantity.toFloat()-1}.toString()
             val quantity =
                 RequestBody.create(MediaType.parse("text/plain"), items[position].quantity)
@@ -102,8 +104,8 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     }
 
     fun loadData(){
+        Log.d("TAG","zzzzzz:"+MySharedStorage.getUserId())
         val user_id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
-
         RetrofitClient.getApiHolder().getCart(user_id).enqueue(object: retrofit2.Callback<RetrofitCartItem>{
             override fun onResponse(call: Call<RetrofitCartItem>, response: Response<RetrofitCartItem>) {
                 if(response.code()==Constants.code_OK){
@@ -112,14 +114,14 @@ class Cart : AppCompatActivity(), cartItemFunctions {
 
                     for(item in items){
                         price+=item.total_price.toFloat()
+                        Log.d("TAG","fuck"+price)
                     }
                     updateData()
 
                 }else if(response.code()==Constants.code_NO_CONTENT){
                     binding.empty.visibility= View.VISIBLE
-                }else{
-                    Log.d("TAG","getCart:"+response.code().toString())
                 }
+                Log.d("TAG","getCart:"+response.code().toString())
             }
 
             override fun onFailure(call: Call<RetrofitCartItem>, t: Throwable) {
@@ -151,20 +153,12 @@ class Cart : AppCompatActivity(), cartItemFunctions {
         val calendar: Calendar = Calendar.getInstance() // Returns instance with current date and time set
         val formatter = SimpleDateFormat("yyyy-dd-MM")
         order.date=formatter.format(calendar.time)
+        order.user_id=MySharedStorage.getUserId()
+        val user_id = RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
         for(item in items) {
-            order.name = item.name + ","
-            price += item.total_price.toFloat()
-            val user_id = RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
-            RetrofitClient.getApiHolder().deleteWholeCart(user_id)
-                .enqueue(object : Callback<RetrofitResponse> {
-                    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        Log.d("TAG", "deleteWholeCart:" + response.code().toString())
-                    }
-
-                    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
-                        Log.d("TAG", "deleteWholeCart:" + t.localizedMessage)
-                    }
-                })
+            order.name =order.name+ ", "+item.name
+            order.status="Pending Confirmation"
+            order.price=price.toString()
             val orderItem = OrderItem();orderItem.fromCartItem(item);
             orderItem.order_id = order.order_id
             RetrofitClient.getApiHolder().setOrderItems(orderItem)
@@ -177,6 +171,16 @@ class Cart : AppCompatActivity(), cartItemFunctions {
                     }
                 })
             if(item==items.last()){
+                RetrofitClient.getApiHolder().deleteWholeCart(user_id)
+                    .enqueue(object : Callback<RetrofitResponse> {
+                        override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                            Log.d("TAG", "deleteWholeCart:" + response.code().toString())
+                        }
+
+                        override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                            Log.d("TAG", "deleteWholeCart:" + t.localizedMessage)
+                        }
+                    })
                 RetrofitClient.getApiHolder().setOrder(order).enqueue(object: Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                         Toast.makeText(applicationContext, "done!", Toast.LENGTH_SHORT).show()

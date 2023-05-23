@@ -35,7 +35,7 @@ class OrderItemAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.customview_cart_item,parent,false)
+        val view=LayoutInflater.from(parent.context).inflate(R.layout.customview_order_item,parent,false)
         val vh=ViewHolder(view)
         return vh
     }

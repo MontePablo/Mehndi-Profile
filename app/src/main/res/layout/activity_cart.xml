@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/myBackround"
     tools:context=".Cart">
     <TextView
         android:id="@+id/empty"
@@ -62,7 +63,7 @@
             android:id="@+id/amount"
             android:layout_marginTop="14dp"
             android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             style="@style/myText3"
             android:textStyle="bold"
@@ -70,7 +71,7 @@
             android:text="2000"/>
         <Button
             android:id="@+id/continueBtn"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="60dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/myButton"

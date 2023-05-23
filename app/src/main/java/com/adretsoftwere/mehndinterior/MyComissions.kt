@@ -29,6 +29,8 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
         super.onCreate(savedInstanceState)
         binding= ActivityMyComissionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor=getColor(R.color.sixty1)
+
         userAdapter=UserAdapter(this)
         orderAdapter= OrderAdapter(this,layoutInflater,this)
         orderItemAdapter= OrderItemAdapter(this)
@@ -58,7 +60,7 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
 
     override fun itemClick(user: User) {
         val user_id=RequestBody.create(MediaType.parse("text/plain"),user.user_id)
-        RetrofitClient.getApiHolder().getOrder(user_id).enqueue(object:Callback<RetrofitOrder>{
+        RetrofitClient.getApiHolder().getOrderByUser(user_id).enqueue(object:Callback<RetrofitOrder>{
             override fun onResponse(call: Call<RetrofitOrder>, response: Response<RetrofitOrder>) {
                 if(response.code()==Constants.code_OK){
                     orders=response.body()!!.data
@@ -67,12 +69,12 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
                 }else if(response.code()==Constants.code_NO_CONTENT){
                     Toast.makeText(applicationContext,"no orders found!",Toast.LENGTH_SHORT).show()
                 }else{
-                    Log.d("TAG","getOrder:"+response.code())
+                    Log.d("TAG","getOrderByUser:"+response.code())
                 }
             }
 
             override fun onFailure(call: Call<RetrofitOrder>, t: Throwable) {
-                Log.d("TAG","getOrder"+t.localizedMessage)
+                Log.d("TAG","getOrderByUser"+t.localizedMessage)
             }
         })
     }

@@ -114,7 +114,9 @@ interface RetrofitApiHolder {
     fun setOrder(@Body order:Order):Call<RetrofitResponse>
     @Multipart
     @POST("get_order.php")
-    fun getOrder(@Part("user_id") user_id: RequestBody):Call<RetrofitOrder>
+    fun getOrderByUser(@Part("user_id") user_id: RequestBody):Call<RetrofitOrder>
+    @GET("order.php")
+    fun getOrder():Call<RetrofitOrder>
 
     @POST("update_order.php")
     fun updateOrderStatus(@Part("order_id") order_id:RequestBody,@Part("status") status:RequestBody):Call<RetrofitResponse>

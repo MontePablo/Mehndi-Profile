@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         if(user_type==Constants.MANUFACTURER){
             binding.grid.removeView(binding.orders)
             binding.grid.removeView(binding.shop)
+            binding.grid.removeView(binding.cart)
+
         }else{
             binding.grid.removeView(binding.manageItems)
             binding.grid.removeView(binding.manageUsers)
@@ -51,7 +53,10 @@ class MainActivity : AppCompatActivity() {
         binding.manageUsers.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext,Users::class.java))
         })
-        binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
+        binding.cart.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(applicationContext,Cart::class.java))
+        })
+        binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,OrdersSeller::class.java)) }
         binding.orders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
 
         binding.logout.setOnClickListener { MySharedStorage.setUserId("");startActivity(Intent(applicationContext,Login::class.java)); finish() }

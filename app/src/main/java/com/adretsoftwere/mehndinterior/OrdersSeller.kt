@@ -12,6 +12,7 @@ import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityOrdersBinding
+import com.adretsoftwere.mehndinterior.databinding.ActivityOrdersSellerBinding
 import com.adretsoftwere.mehndinterior.models.Order
 import com.adretsoftwere.mehndinterior.models.RetrofitOrder
 import com.google.gson.Gson
@@ -21,33 +22,35 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Orders : AppCompatActivity(),orderFunctions {
-    lateinit var binding:ActivityOrdersBinding
+class OrdersSeller : AppCompatActivity(),orderFunctions {
+    lateinit var binding:ActivityOrdersSellerBinding
     lateinit var adapter:OrderAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityOrdersBinding.inflate(layoutInflater)
+        binding= ActivityOrdersSellerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter=OrderAdapter(this,layoutInflater,this)
-        binding.recyclerView.layoutManager=LinearLayoutManager(this)
+        adapter= OrderAdapter(this,layoutInflater,this)
+        binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.adapter=adapter
 
-        val user_id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
-        RetrofitClient.getApiHolder().getOrderByUser(user_id).enqueue(object:Callback<RetrofitOrder>{
+        val user_id= RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
+        RetrofitClient.getApiHolder().getOrder().enqueue(object:
+            Callback<RetrofitOrder> {
             override fun onResponse(call: Call<RetrofitOrder>, response: Response<RetrofitOrder>) {
-                if(response.code()==Constants.code_OK){
-                    Log.d("TAG","getOrderByUser:"+response.code().toString())
+                if(response.code()== Constants.code_OK){
+                    Log.d("TAG","getOrder:"+response.code().toString())
                     adapter.update(response.body()!!.data)
-                }else if(response.code()==Constants.code_NO_CONTENT){
-                    Log.d("TAG","getOrderByUser:"+response.code().toString())
+                }else if(response.code()== Constants.code_NO_CONTENT){
+                    Log.d("TAG","getOrder:"+response.code().toString())
                     binding.empty.visibility= View.VISIBLE
                 }
             }
 
             override fun onFailure(call: Call<RetrofitOrder>, t: Throwable) {
-                Log.d("TAG","getOrderByUser:"+t.localizedMessage)
+                Log.d("TAG","getOrder:"+t.localizedMessage)
             }
         })
     }

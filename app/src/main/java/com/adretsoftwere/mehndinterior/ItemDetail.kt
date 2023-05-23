@@ -71,7 +71,7 @@ class ItemDetail : AppCompatActivity() {
     fun imageLoad(data: ArrayList<Image>) {
         for(i in data) {
             val viewBinding = CustomviewItemImageBinding.inflate(layoutInflater)
-            val url=Constants.apiUrl+Constants.imageUrl+i
+            val url=Constants.apiUrl+Constants.imageUrl+i.filename
             Glide.with(applicationContext).load(url).into(viewBinding.imageView)
             binding.images.addView(viewBinding.root)
         }
@@ -83,18 +83,22 @@ class ItemDetail : AppCompatActivity() {
         cart.user_id=MySharedStorage.getUserId()
         if(price!=0F){
             cart.price=price.toString()
-            cart.total_price=cart.price
+            cart.total_price=price.toString()
+        }else{
+            cart.price=item.price
+            cart.total_price=item.price
         }
         cart.quantity="1"
         RetrofitClient.getApiHolder().setCart(cart).enqueue(object :
             retrofit2.Callback<RetrofitResponse> {
             override fun onResponse(call: Call<RetrofitResponse>, response: retrofit2.Response<RetrofitResponse>) {
-                if (response.code() == Constants.code_OK) {
+                if (response.code() == Constants.code_CREATED) {
                     Log.d("TAG","setCart:"+"cart added")
                     binding.addtocart.text="Added to cart"
                     binding.addtocart.isClickable=false
                     Toast.makeText(applicationContext,"added to cart!",Toast.LENGTH_SHORT).show()
                 }
+                Log.d("TAG","setCart:"+ response.code())
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","setCart:"+ t.localizedMessage)

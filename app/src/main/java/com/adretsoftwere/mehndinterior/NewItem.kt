@@ -3,15 +3,16 @@ package com.adretsoftwere.mehndinterior
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +25,11 @@ import com.adretsoftwere.mehndinterior.databinding.CustomviewImageBinding
 import com.adretsoftwere.mehndinterior.models.Item
 import com.adretsoftwere.mehndinterior.models.RetrofitItem
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -80,8 +86,18 @@ class NewItem : AppCompatActivity(), itemFunctions {
             photoPick(imageBinding.hashCode())
             imageViewTable.put(imageBinding.hashCode(),imageBinding)
         })
+        imageBinding.delete.setOnClickListener {
+            imageViewTable.remove(imageBinding.hashCode())
+            binding.imageLayout.removeView(imageBinding.root)
+            deleteImageFromServer(imageBinding)
+        }
         binding.imageLayout.addView(imageBinding.root)
     }
+
+    private fun deleteImageFromServer(imageBinding: CustomviewImageBinding) {
+
+    }
+
     fun photoPick(requestCode: Int) {
         val intent = Intent()
         intent.type = "image/*"
@@ -100,21 +116,30 @@ class NewItem : AppCompatActivity(), itemFunctions {
             var imageUri=data!!.data
             Log.d("TAG","onActivityResult Image received")
             val imageBinding= imageViewTable[requestCode]
-           imageUpload(imageUri,item_id,imageBinding)
+            CoroutineScope(Dispatchers.IO).launch {
+                imageUpload(imageUri, item_id, imageBinding)
+            }
         }
         return
     }
 
-    private fun imageUpload(imageUri: Uri?, idd: String, imageBinding: CustomviewImageBinding?) {
+    private suspend fun imageUpload(imageUri: Uri?, idd: String, imageBinding: CustomviewImageBinding?) {
             if(imageUri!=null){
-                imageBinding?.imageview?.setImageURI(imageUri)
-                imageBinding?.insert?.visibility=View.GONE
-                progressBarFunc(imageBinding!!)
-                imageBinding.retry.visibility=View.GONE
+                runOnUiThread {
+                    imageBinding?.imageview?.setImageURI(imageUri)
+                    imageBinding?.insert?.visibility=View.GONE
+                    progressBarFunc(imageBinding!!)
+                    imageBinding.retry.visibility=View.GONE
+                }
+
                 val file= File(RealPathUtil.getRealPath(this, imageUri))
+                val compressedImage = Compressor.compress(this, file){
+                    default(504,896, Bitmap.CompressFormat.JPEG,60)
+                }
+                Log.d("TAG","orginalSize: ${file.length()} compressedSize:${compressedImage.length()}")
                 val fileName=getNewFileName(file.name)
-                imageBinding.storeName.text=fileName
-                val requestFile= RequestBody.create(MediaType.parse("image/*"), file);
+                imageBinding!!.storeName.text=fileName
+                val requestFile= RequestBody.create(MediaType.parse("image/*"), compressedImage);
                 val id=RequestBody.create(MediaType.parse("text/plain"),idd)
 //                val requestFile= RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 val body=MultipartBody.Part.createFormData("uploaded_file",fileName,requestFile)
@@ -134,7 +159,9 @@ class NewItem : AppCompatActivity(), itemFunctions {
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                         imageBinding!!.retry.visibility=View.VISIBLE
                         imageBinding!!.retry.setOnClickListener(View.OnClickListener {
-                            imageUpload(imageUri,idd,imageBinding)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                imageUpload(imageUri, idd, imageBinding)
+                            }
                         })
                         imageBinding.progressBar.visibility=View.GONE
                         imageBinding.insert.visibility=View.GONE
@@ -267,6 +294,7 @@ class NewItem : AppCompatActivity(), itemFunctions {
     override fun ItemClickFunc(item: Item, view: View) {
        view.background=resources.getDrawable(R.drawable.selected_bg)
        this.parent=item.item_id
+        binding.linkedParent.text=item.name
     }
 
     fun upload(){
