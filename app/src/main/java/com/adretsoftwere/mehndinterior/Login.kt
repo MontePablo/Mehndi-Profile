@@ -38,7 +38,7 @@ class Login : AppCompatActivity() {
                 val mobile=binding.id.text.toString()
                 val password=binding.password.text.toString()
                 val mob= RequestBody.create(MediaType.parse("text/plain"),mobile)
-                RetrofitClient.getApiHolder().searchUserByMobile(mob).enqueue(object: Callback<RetrofitUser>{
+                RetrofitClient.getApiHolder().getUserByMobile(mob).enqueue(object: Callback<RetrofitUser>{
                     override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
                         if(response.code()==Constants.code_OK){
                             val fetchedUser=response.body()!!.data[0]
@@ -54,10 +54,10 @@ class Login : AppCompatActivity() {
                         }else if(response.code()==Constants.code_NO_CONTENT){
                             Toast.makeText(applicationContext,"no user found!",Toast.LENGTH_SHORT).show()
                         }
-                        Log.d("TAG","searchUserByMobile:"+response.code())
+                        Log.d("TAG","getUserByMobile:"+response.code())
                     }
                     override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
-                        Log.d("TAG","searchUserByMobile:"+t.localizedMessage)
+                        Log.d("TAG","getUserByMobile:"+t.localizedMessage)
                     }
                 })
             }

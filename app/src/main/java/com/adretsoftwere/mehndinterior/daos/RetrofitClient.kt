@@ -14,7 +14,6 @@ object RetrofitClient {
 //            .addConverterFactory(GsonConverterFactory.create(gson)).build()
         val retrofit= Retrofit.Builder().baseUrl(Constants.apiUrl)
             .addConverterFactory(GsonConverterFactory.create()).build()
-
         retrofitApiHolder=retrofit.create(RetrofitApiHolder::class.java)
     }
     fun getApiHolder(): RetrofitApiHolder {

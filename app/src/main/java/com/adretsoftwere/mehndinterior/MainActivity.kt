@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.adretsoftwere.mehndinterior.adapters.SliderAdapter
 import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMainBinding
+import com.adretsoftwere.mehndinterior.databinding.ChangePasswordFragviewBinding
+import com.adretsoftwere.mehndinterior.databinding.UserOptionsFragviewBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitImage
+import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -31,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         user_type =MySharedStorage.getUserType()
         saveUser()
         Log.d("TAG","gg"+user_type)
+        binding.grid.removeView(binding.account)
         if(user_type==Constants.MANUFACTURER){
             binding.grid.removeView(binding.orders)
             binding.grid.removeView(binding.shop)
@@ -40,8 +46,8 @@ class MainActivity : AppCompatActivity() {
             binding.grid.removeView(binding.manageItems)
             binding.grid.removeView(binding.manageUsers)
             binding.grid.removeView(binding.newItem)
-
         }
+        binding.changePassword.setOnClickListener { changePassword() }
 
 
         binding.shop.setOnClickListener(View.OnClickListener {
@@ -56,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         binding.cart.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext,Cart::class.java))
         })
+
         binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,OrdersSeller::class.java)) }
         binding.orders.setOnClickListener { startActivity(Intent(applicationContext,Orders::class.java)) }
 
@@ -81,9 +88,38 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun changePassword() {
+        val dialogBuilder= AlertDialog.Builder(this)
+        val viewBinding= ChangePasswordFragviewBinding.inflate(layoutInflater)
+        dialogBuilder.setView(viewBinding.root)
+        val dialog=dialogBuilder.create()
+        dialog.show()
+        viewBinding.save.setOnClickListener(View.OnClickListener {
+            if(viewBinding.newPassword.text.isBlank())
+                Toast.makeText(applicationContext,"enter new password",Toast.LENGTH_SHORT).show()
+            else if(viewBinding.newPassword.text.length<6)
+                Toast.makeText(applicationContext,"atleast 6 character required!",Toast.LENGTH_SHORT).show()
+            else{
+                val user_id = RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
+                val password = RequestBody.create(MediaType.parse("text/plain"),viewBinding.newPassword.text.toString() )
+                RetrofitClient.getApiHolder().updateUserPassword(user_id,password).enqueue(object:Callback<RetrofitResponse>{
+                    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+
+                    }
+                    override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+
+                    }
+                })
+                startActivity(Intent(applicationContext,MainActivity::class.java))
+            }
+        })
+        viewBinding.cancel.setOnClickListener { dialog.dismiss() }
+    }
+
     fun saveUser(){
         val mob= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
-        RetrofitClient.getApiHolder().searchUserByMobile(mob).enqueue(object : Callback<RetrofitUser> {
+        RetrofitClient.getApiHolder().getUserByMobile(mob).enqueue(object : Callback<RetrofitUser> {
             override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
                 if(response.code()== Constants.code_OK)
                     MySharedStorage.saveUser(response.body()!!.data[0])

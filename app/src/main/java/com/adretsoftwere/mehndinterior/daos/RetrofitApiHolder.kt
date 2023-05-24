@@ -13,9 +13,6 @@ import retrofit2.http.Part
 interface RetrofitApiHolder {
 
 
-
-
-
     @GET("item.php")
     fun getItems(): Call<RetrofitItem>
 
@@ -66,6 +63,12 @@ interface RetrofitApiHolder {
 
     @POST("user.php")
     fun setUser(@Body user:User): Call<RetrofitResponse>
+    @POST("update_user.php")
+    fun updateUser(@Body user:User): Call<RetrofitResponse>
+
+    @Multipart
+    @POST("update_user_password.php")
+    fun updateUserPassword(@Part("user_id") user_id: RequestBody,@Part("password") password:RequestBody): Call<RetrofitResponse>
 
     @GET("user.php")
     fun getUser(): Call<RetrofitUser>
@@ -75,7 +78,7 @@ interface RetrofitApiHolder {
 
     @Multipart
     @POST("search_user_by_mobile.php")
-    fun searchUserByMobile(@Part("mobile") mobile: RequestBody): Call<RetrofitUser>
+    fun getUserByMobile(@Part("mobile") mobile: RequestBody): Call<RetrofitUser>
 
 
 

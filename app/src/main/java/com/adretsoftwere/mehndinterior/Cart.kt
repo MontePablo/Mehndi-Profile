@@ -48,17 +48,25 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     }
 
     override fun increaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int) {
-        items[position].quantity={items[position].quantity.toFloat()+1}.toString()
+        items[position].quantity={items[position].quantity.toInt()+1}.toString()
         val quantity=RequestBody.create(MediaType.parse("text/plain"),items[position].quantity)
         val user_id=RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
         val item_id=RequestBody.create(MediaType.parse("text/plain"),items[position].item_id)
-        items[position].total_price={items[position].quantity.toFloat()*items[position].price.toFloat()}.toString()
+        items[position].total_price={items[position].quantity.toInt()*items[position].price.toFloat()}.toString()
         val total_price=RequestBody.create(MediaType.parse("text/plain"),items[position].total_price)
         price+=items[position].price.toFloat()
-        updateData()
+        Log.d("TAG","increaseQuant::itemID${items.get(position).item_id}")
+        Log.d("TAG","increaseQuant::userId${items.get(position).user_id}")
+        Log.d("TAG","increaseQuant::quantity${items.get(position).quantity}")
+        Log.d("TAG","increaseQuant::total_price${items.get(position).total_price}")
+
         RetrofitClient.getApiHolder().increaseCart(item_id,user_id,quantity,total_price).enqueue(object : Callback<RetrofitResponse>{
             override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                 Log.d("TAG","increaseCart:"+response.code().toString())
+                if(response.code()==Constants.code_OK){
+                    holder.quantity.setText(items[position].quantity)
+                    updateData()
+                }
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","increaseCart:"+t.localizedMessage)
@@ -71,29 +79,27 @@ class Cart : AppCompatActivity(), cartItemFunctions {
     }
 
     override fun decreaseQuantity(holder:CartItemAdapter.ViewHolder,position: Int) {
-        if(items[position].quantity.toFloat()!=1F) {
-            items[position].quantity={items[position].quantity.toFloat()-1}.toString()
+        if(items[position].quantity.toInt()!=1) {
+            items[position].quantity={items[position].quantity.toInt()-1}.toString()
             val quantity =
                 RequestBody.create(MediaType.parse("text/plain"), items[position].quantity)
             val user_id =
                 RequestBody.create(MediaType.parse("text/plain"), MySharedStorage.getUserId())
             val item_id = RequestBody.create(MediaType.parse("text/plain"), items[position].item_id)
             items[position].total_price =
-                { items[position].quantity.toFloat() * items[position].price.toFloat() }.toString()
+                { items[position].quantity.toInt() * items[position].price.toFloat() }.toString()
             val total_price =
                 RequestBody.create(MediaType.parse("text/plain"), items[position].total_price)
             price -= items[position].price.toFloat()
             updateData()
-            RetrofitClient.getApiHolder()
-                .decreaseCart(item_id, user_id, quantity, total_price)
-                .enqueue(object : Callback<RetrofitResponse> {
-                    override fun onResponse(
-                        call: Call<RetrofitResponse>,
-                        response: Response<RetrofitResponse>
-                    ) {
+            RetrofitClient.getApiHolder().decreaseCart(item_id, user_id, quantity, total_price).enqueue(object : Callback<RetrofitResponse> {
+                    override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
                         Log.d("TAG", "increaseCart:" + response.code().toString())
+                        if(response.code()==Constants.code_OK){
+                            holder.quantity.setText(items[position].quantity)
+                            updateData()
+                        }
                     }
-
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                         Log.d("TAG", "increaseCart:" + t.localizedMessage)
                     }

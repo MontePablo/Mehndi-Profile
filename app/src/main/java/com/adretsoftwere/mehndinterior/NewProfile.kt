@@ -18,6 +18,8 @@ import com.adretsoftwere.mehndinterior.databinding.SearchUserFragviewBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitResponse
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.adretsoftwere.mehndinterior.models.User
+import com.google.gson.Gson
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,13 +29,21 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var parentUser:User
     lateinit var binding:ActivityNewProfileBinding
     lateinit var users:ArrayList<User>
+    lateinit var user:User
+    var isUpdate=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityNewProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
         loadParents()
-        val list= listOf<String>(Constants.DISTRIBUTER,Constants.AGENT,Constants.MANUFACTURER,Constants.RETAILER,Constants.WHOLESALER)
+        isUpdate=intent.getBooleanExtra("isUpdate",false)
+
+        if(isUpdate){
+            user= Gson().fromJson(intent.getStringExtra("order"), User::class.java)
+            loadDataOfPreviousUser()
+        }
+        val list= listOf<String>(Constants.MANUFACTURER,Constants.DISTRIBUTER,Constants.AGENT,Constants.RETAILER,Constants.WHOLESALER)
         val typeAdapter: ArrayAdapter<*>
         typeAdapter= ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list)
         binding.spinnerAccountType.adapter=typeAdapter
@@ -50,29 +60,57 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             if(name.isBlank() || email.isBlank() || number.isBlank() || password.isBlank() )
                 Toast.makeText(applicationContext,"fill all fields first!",Toast.LENGTH_SHORT).show()
             else{
-                val user=User()
                 user.let {
                     it.user_type=accountType
                     it.name=name;it.email=email;it.mobile=number;it.address=address;
-                    it.password=password;it.user_id=System.currentTimeMillis().toString()
+                    it.password=password;
 
-                    if(accountType!=Constants.MANUFACTURER){
-                        if(parentUser!=null){
-                            it.parent=parentUser.user_id
+                    if(!isUpdate)
+                        it.user_id=System.currentTimeMillis().toString()
+                    if(!isUpdate) {
+                        if (accountType != Constants.MANUFACTURER) {
+                            if (parentUser != null) {
+                                it.parent = parentUser.user_id
+                                createUser(user)
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "select parent first!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else {
                             createUser(user)
-                        }else{
-                            Toast.makeText(applicationContext,"select parent first!",Toast.LENGTH_SHORT).show()
                         }
                     }else{
-                        createUser(user)
+                        update(user)
                     }
                 }
             }
         })
     }
 
+    private fun loadDataOfPreviousUser() {
+        binding.apply {
+            mobile.setText(user.mobile)
+            name.setText(user.name)
+            address.setText(user.address)
+            email.setText(user.email)
+            for(p in users){
+                if(p.user_id==user.parent){
+                    searchUserText.setText(p.name)
+                    parentUser=p
+                    break
+                }
+            }
+            type.setText(user.user_type)
+            binding.create.setText("Update")
+        }
+    }
+
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         accountType=p0?.selectedItem.toString()
+        binding.type.setText(p0?.selectedItem.toString())
 
     }
     fun createUser(user:User){
@@ -89,6 +127,22 @@ class NewProfile : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                 Log.d("TAG","on failure retro : ${t.localizedMessage}")
+            }})
+    }
+    fun update(user:User){
+        RetrofitClient.getApiHolder().updateUser(user).enqueue(object:Callback<RetrofitResponse>{
+            override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                if(response.code()==Constants.code_CREATED){
+                    Log.d("TAG",response.code().toString())
+                    Toast.makeText(applicationContext,"updated! succesfully!",Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext,Users::class.java))
+                    finish()
+                }else {
+                    Log.d("TAG 2",response.code().toString() + response.message().toString())
+                }
+            }
+            override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
+                Log.d("TAG"," updateUser : ${t.localizedMessage}")
             }})
     }
 

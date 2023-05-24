@@ -12,7 +12,7 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        window.statusBarColor=getColor(R.color.sixty1)
+        window.statusBarColor=getColor(R.color.white)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 //        actionBar?.hide()
         MySharedStorage.func(applicationContext)

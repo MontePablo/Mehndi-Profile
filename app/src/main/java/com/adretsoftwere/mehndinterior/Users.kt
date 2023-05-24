@@ -15,6 +15,7 @@ import com.adretsoftwere.mehndinterior.databinding.ActivityUsersBinding
 import com.adretsoftwere.mehndinterior.databinding.UserOptionsFragviewBinding
 import com.adretsoftwere.mehndinterior.models.RetrofitUser
 import com.adretsoftwere.mehndinterior.models.User
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +66,11 @@ class Users : AppCompatActivity(),userFunctions {
             startActivity(Intent(applicationContext,DiscountsManage::class.java))
         })
         viewBinding.updatePersonalData.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(applicationContext,NewProfile::class.java))
+            val gson = Gson()
+            val intent = Intent(this, NewProfile::class.java)
+            intent.putExtra("user", gson.toJson(user))
+            intent.putExtra("isUpdate",true)
+            startActivity(intent)
         })
     }
 
