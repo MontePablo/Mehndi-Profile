@@ -114,13 +114,11 @@ class DiscountsManage : AppCompatActivity(), itemFunctions{
                 discount.amount=price
                 RetrofitClient.getApiHolder().setDiscount(discount).enqueue(object : Callback<RetrofitResponse>{
                     override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
-                        if(response.code()==Constants.code_OK) {
+                        if(response.code()==Constants.code_CREATED) {
                             Toast.makeText(applicationContext, "saved", Toast.LENGTH_SHORT).show()
                             dialog.dismiss()
                         }
-                        else{
-                            Log.d("TAG","setDiscount:"+response.code().toString())
-                        }
+                        Log.d("TAG","setDiscount:"+response.code().toString())
                     }
                     override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {
                         Log.d("TAG","setDiscount:"+t.localizedMessage)

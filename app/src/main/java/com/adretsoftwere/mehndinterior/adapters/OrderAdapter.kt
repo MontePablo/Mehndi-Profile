@@ -8,20 +8,24 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.adretsoftwere.mehndinterior.R
+import com.adretsoftwere.mehndinterior.daos.Constants
 import com.adretsoftwere.mehndinterior.models.Order
 
 
 class OrderAdapter(
     listener: orderFunctions,
     layoutInflater: LayoutInflater,
-    applicationContext: Context
+    applicationContext: Context,
+    command:String="order"
 ): RecyclerView.Adapter<OrderAdapter.ViewHolder>() {
 
     var listener:orderFunctions
     var items= arrayListOf<Order>()
+    var command=""
 
     init {
         this.listener=listener
+        this.command=command
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,8 +43,12 @@ class OrderAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(command==Constants.COMISSION){
+            holder.buyer_layout.visibility=View.VISIBLE
+            holder.name.text=items[position].name
+        }
         holder.date.text=items[position].date
-        holder.name.text=items[position].name
+        holder.title.text=items[position].title
         holder.price.text=items[position].price
         holder.status.text=items[position].status
         holder.root.setOnClickListener { listener.itemClick(items[position]) }
@@ -48,10 +56,13 @@ class OrderAdapter(
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
         var price=view.findViewById<TextView>(R.id.order_price)
-        var name=view.findViewById<TextView>(R.id.order_name)
+        var title=view.findViewById<TextView>(R.id.order_title)
         var root=view.findViewById<CardView>(R.id.order_root)
         var date=view.findViewById<TextView>(R.id.order_date)
         var status=view.findViewById<TextView>(R.id.order_status)
+        var buyer_layout=view.findViewById<LinearLayout>(R.id.order_buyer_details)
+        var name=view.findViewById<TextView>(R.id.order_name)
+
     }
 }
 interface orderFunctions{

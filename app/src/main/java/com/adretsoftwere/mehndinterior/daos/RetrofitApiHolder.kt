@@ -80,7 +80,9 @@ interface RetrofitApiHolder {
     @POST("search_user_by_mobile.php")
     fun getUserByMobile(@Part("mobile") mobile: RequestBody): Call<RetrofitUser>
 
-
+    @Multipart
+    @POST("search_user_by_id.php")
+    fun getUserById(@Part("user_id") user_id: RequestBody): Call<RetrofitUser>
 
 
 
@@ -94,10 +96,8 @@ interface RetrofitApiHolder {
 
     @Multipart
     @POST("update_cart_quantity.php")
-    fun increaseCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody,@Part("quantity")  quantity:RequestBody,@Part("total_price") total_price:RequestBody): Call<RetrofitResponse>
-    @Multipart
-    @POST("update_cart_quantity.php")
-    fun decreaseCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody,@Part("quantity") quantity:RequestBody,@Part("total_price") total_price:RequestBody): Call<RetrofitResponse>
+    fun updateCartQuantity(@Part("item_id") item_id: RequestBody, @Part("user_id") user_id: RequestBody, @Part("quantity")  quantity:RequestBody, @Part("total_price") total_price:RequestBody): Call<RetrofitResponse>
+
     @Multipart
     @POST("update_cart_delete.php")
     fun deleteCart(@Part("item_id") item_id: RequestBody,@Part("user_id") user_id: RequestBody): Call<RetrofitResponse>
@@ -121,6 +121,7 @@ interface RetrofitApiHolder {
     @GET("order.php")
     fun getOrder():Call<RetrofitOrder>
 
+    @Multipart
     @POST("update_order.php")
     fun updateOrderStatus(@Part("order_id") order_id:RequestBody,@Part("status") status:RequestBody):Call<RetrofitResponse>
 

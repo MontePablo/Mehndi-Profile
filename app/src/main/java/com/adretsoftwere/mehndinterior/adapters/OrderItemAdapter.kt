@@ -89,8 +89,8 @@ fun priceFetch(holder: OrderItemAdapter.ViewHolder,orderItem: OrderItem) {
                     val disc=response.body()!!.data[0].amount
                     val amount=orderItem.actual_price.toFloat()-disc.toFloat()
                     holder.actualprice.text=amount.toString()
-                    val profit={amount-orderItem.price.toFloat()}.toString()
-                    holder.profit.text=profit
+                    val profit=orderItem.price.toFloat()-amount
+                    holder.profit.text=profit.toString()
                 }else{
                     val disc=response.body()!!.data[0].amount
                     val amount="0.${disc}".toFloat() * orderItem.actual_price.toFloat()

@@ -6,5 +6,6 @@ class Order {
     var user_id=""
     var status=""
     var date=""
+    var title=""
     var name=""
 }

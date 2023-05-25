@@ -71,12 +71,12 @@
             android:text="2000"/>
         <Button
             android:id="@+id/continueBtn"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="45dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/myButton"
             android:text="Place order"
-            android:padding="10dp"/>
+            android:padding="15dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

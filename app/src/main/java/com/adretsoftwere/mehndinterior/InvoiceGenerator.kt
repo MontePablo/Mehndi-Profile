@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.adretsoftwere.mehndinterior.models.InvoiceData
 import com.itextpdf.io.image.ImageDataFactory
@@ -35,6 +36,7 @@ class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
     lateinit var activity:AppCompatActivity
     lateinit var invoiceUri: Uri
     init {
+        this.activity=activity
         val officeAddress ="MEHNDI PROFILE INDUSTRIES PVT. LTD.\nSiv Sai Puram, Badangpet, hyderabad, Telangana, 500058\nPhone no.: 9246272658\nEmail: info@mehndipvc.com\nGSTIN: 19AAQCM4236P1ZM\nState: 19-West Bengal"
 
         val pdfpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -244,10 +246,12 @@ class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
 //        val pdfFile = File(pdfpath, "namePdfFile.pdf") //File path
         if (file.exists()) //Checking if the file exists or not
         {
-            val path = Uri.fromFile(file)
+//            val path = Uri.fromFile(file)
+            val photoURI: Uri = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".provider", file)
             val objIntent = Intent(Intent.ACTION_VIEW)
-            objIntent.setDataAndType(path, "application/pdf")
+            objIntent.setDataAndType(photoURI, "application/pdf")
             objIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(activity,objIntent,null) //Starting the pdf viewer
         } else {
             Toast.makeText(activity, "The file not exists! ", Toast.LENGTH_SHORT).show()

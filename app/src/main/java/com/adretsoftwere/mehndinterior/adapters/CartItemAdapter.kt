@@ -42,7 +42,7 @@ class CartItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        holder.quantity.text=items[position].quantity
         holder.code.text=items[position].code
         holder.name.text=items[position].name
         holder.price.text=items[position].price

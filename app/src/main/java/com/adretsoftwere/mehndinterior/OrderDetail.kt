@@ -23,16 +23,22 @@ import retrofit2.Response
 class OrderDetail : AppCompatActivity(),orderItemFunctions {
     lateinit var order: Order
     lateinit var orderItems: ArrayList<OrderItem>
-    lateinit var adapter:OrderItemAdapter
+    lateinit var adapter: OrderItemAdapter
     lateinit var binding:ActivityOrderDetailBinding
+    var command:String?=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityOrderDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= OrderItemAdapter(this)
         order= Gson().fromJson(intent.getStringExtra("order"), Order::class.java)
+        command=intent.getStringExtra("command")
+
+        if(command==Constants.COMISSION)
+            adapter=OrderItemAdapter(this,Constants.COMISSION)
+        else
+            adapter= OrderItemAdapter(this)
         binding.recylerView.layoutManager=LinearLayoutManager(this)
         binding.recylerView.adapter=adapter
         loadData()
@@ -40,7 +46,6 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
 
     }
     fun loadData(){
-
         binding.status.text=order.status
         binding.date.text=order.date
         binding.orderid.text=order.order_id
@@ -90,9 +95,11 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
 
         RetrofitClient.getApiHolder().updateOrderStatus(order_id,status).enqueue(object:Callback<RetrofitResponse>{
             override fun onResponse(call: Call<RetrofitResponse>, response: Response<RetrofitResponse>) {
+                if(response.code()==Constants.code_OK){
+                    binding.confirmbtn.visibility= View.GONE
+                    Toast.makeText(applicationContext,"Confirmed!",Toast.LENGTH_SHORT).show()
+                }
                 Log.d("TAG","updateOrderStatus:"+response.code())
-                binding.confirmbtn.visibility= View.GONE
-                Toast.makeText(applicationContext,"Confirmed!",Toast.LENGTH_SHORT).show()
             }
 
             override fun onFailure(call: Call<RetrofitResponse>, t: Throwable) {

@@ -2,7 +2,7 @@ package com.adretsoftwere.mehndinterior.daos
 
 object Constants{
 
-    val apiUrl="https://799e-103-121-156-102.ngrok-free.app/"
+    val apiUrl= "https://adef-103-121-156-102.ngrok-free.app/"
 //    val apiUrl="https://api.mehndipvc.com/"
 
     val imageUrl="assets/"

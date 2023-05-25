@@ -1,5 +1,6 @@
 package com.adretsoftwere.mehndinterior
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import com.adretsoftwere.mehndinterior.daos.MySharedStorage
 import com.adretsoftwere.mehndinterior.daos.RetrofitClient
 import com.adretsoftwere.mehndinterior.databinding.ActivityMyComissionsBinding
 import com.adretsoftwere.mehndinterior.models.*
+import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -33,7 +35,7 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
 
         userAdapter=UserAdapter(this)
         orderAdapter= OrderAdapter(this,layoutInflater,this)
-        orderItemAdapter= OrderItemAdapter(this)
+        orderItemAdapter= OrderItemAdapter(this,Constants.COMISSION)
         binding.recyclerView.adapter=userAdapter
         binding.recyclerView.layoutManager=LinearLayoutManager(this)
 
@@ -80,23 +82,28 @@ class MyComissions : AppCompatActivity(),userFunctions,orderItemFunctions,orderF
     }
 
     override fun itemClick(order: Order) {
-        val order_id=RequestBody.create(MediaType.parse("text/plain"),order.order_id)
-        RetrofitClient.getApiHolder().getOrderItems(order_id).enqueue(object:Callback<RetrofitOrderItem>{
-            override fun onResponse(call: Call<RetrofitOrderItem>, response: Response<RetrofitOrderItem>) {
-                if(response.code()==Constants.code_OK){
-                    orderItems=response.body()!!.data
-                    binding.recyclerView.adapter=orderItemAdapter
-                    orderItemAdapter.update(orderItems)
-                }else if(response.code()==Constants.code_NO_CONTENT){
-                    Toast.makeText(applicationContext,"no items found!",Toast.LENGTH_SHORT).show()
-                }else{
-                    Log.d("TAG","getOrderItems:"+response.code())
-                }
-            }
-            override fun onFailure(call: Call<RetrofitOrderItem>, t: Throwable) {
-                Log.d("TAG","getOrderItems:"+t.localizedMessage)
-            }
-        })
+//        val order_id=RequestBody.create(MediaType.parse("text/plain"),order.order_id)
+//        RetrofitClient.getApiHolder().getOrderItems(order_id).enqueue(object:Callback<RetrofitOrderItem>{
+//            override fun onResponse(call: Call<RetrofitOrderItem>, response: Response<RetrofitOrderItem>) {
+//                if(response.code()==Constants.code_OK){
+//                    orderItems=response.body()!!.data
+//                    binding.recyclerView.adapter=orderItemAdapter
+//                    orderItemAdapter.update(orderItems)
+//                }else if(response.code()==Constants.code_NO_CONTENT){
+//                    Toast.makeText(applicationContext,"no items found!",Toast.LENGTH_SHORT).show()
+//                }else{
+//                    Log.d("TAG","getOrderItems:"+response.code())
+//                }
+//            }
+//            override fun onFailure(call: Call<RetrofitOrderItem>, t: Throwable) {
+//                Log.d("TAG","getOrderItems:"+t.localizedMessage)
+//            }
+//        })
+        val gson = Gson()
+        val intent = Intent(applicationContext, OrderDetail::class.java)
+        intent.putExtra("order", gson.toJson(order))
+        intent.putExtra("command",Constants.COMISSION)
+        startActivity(intent)
     }
 
     override fun itemClick(itemId: String) {

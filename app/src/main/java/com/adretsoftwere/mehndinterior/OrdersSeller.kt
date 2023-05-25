@@ -32,7 +32,7 @@ class OrdersSeller : AppCompatActivity(),orderFunctions {
         setContentView(binding.root)
         window.statusBarColor=getColor(R.color.sixty1)
 
-        adapter= OrderAdapter(this,layoutInflater,this)
+        adapter= OrderAdapter(this,layoutInflater,this,Constants.COMISSION)
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.adapter=adapter
 

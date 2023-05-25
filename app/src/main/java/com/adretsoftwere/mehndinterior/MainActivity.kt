@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         }else{
             binding.grid.removeView(binding.manageItems)
             binding.grid.removeView(binding.manageUsers)
+            binding.grid.removeView(binding.manageOrders)
             binding.grid.removeView(binding.newItem)
         }
         binding.changePassword.setOnClickListener { changePassword() }
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity() {
         })
         binding.cart.setOnClickListener(View.OnClickListener {
             startActivity(Intent(applicationContext,Cart::class.java))
+        })
+        binding.profits.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(applicationContext,MyComissions::class.java))
         })
 
         binding.manageOrders.setOnClickListener { startActivity(Intent(applicationContext,OrdersSeller::class.java)) }
@@ -118,15 +122,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveUser(){
-        val mob= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
-        RetrofitClient.getApiHolder().getUserByMobile(mob).enqueue(object : Callback<RetrofitUser> {
+        Log.d("TAG","userid:+${MySharedStorage.getUserId()}")
+        val id= RequestBody.create(MediaType.parse("text/plain"),MySharedStorage.getUserId())
+        RetrofitClient.getApiHolder().getUserById(id).enqueue(object : Callback<RetrofitUser> {
             override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
                 if(response.code()== Constants.code_OK)
                     MySharedStorage.saveUser(response.body()!!.data[0])
-                Log.d("TAG",response.code().toString())
+                Log.d("TAG","getuserbyid:"+response.code().toString())
             }
             override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
-                Log.d("TAG",t.localizedMessage)
+                Log.d("TAG","getuserbyid:"+t.localizedMessage)
             }
         })
     }
