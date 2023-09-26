@@ -22,6 +22,7 @@ import retrofit2.Response
 
 class OrderDetail : AppCompatActivity(),orderItemFunctions {
     lateinit var order: Order
+    lateinit var user: User
     lateinit var orderItems: ArrayList<OrderItem>
     lateinit var adapter: OrderItemAdapter
     lateinit var binding:ActivityOrderDetailBinding
@@ -56,8 +57,22 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
 
         if(order.status!=Constants.CONFIRMED && MySharedStorage.getUserType()==Constants.MANUFACTURER)
             binding.confirmbtn.visibility=View.VISIBLE
-        if(order.status==Constants.CONFIRMED)
-            binding.invoicebtn.visibility=View.VISIBLE
+        if(order.status==Constants.CONFIRMED) {
+            binding.invoicebtn.visibility = View.VISIBLE
+            val user_id=RequestBody.create(MediaType.parse("text/plain"),order.user_id)
+            RetrofitClient.getApiHolder().getUserById(user_id).enqueue(object:Callback<RetrofitUser>{
+                override fun onResponse(call: Call<RetrofitUser>, response: Response<RetrofitUser>) {
+                    Log.d("TAG","getUserbyId:"+response.code())
+                    if(response.code()==Constants.code_OK){
+                        user=response.body()!!.data[0]
+                    }
+                }
+
+                override fun onFailure(call: Call<RetrofitUser>, t: Throwable) {
+                    Log.d("TAG","getUserbyId:"+t.localizedMessage)
+                }
+            })
+        }
         if(order.status!=Constants.DELIVERED)
             binding.cancelbtn.visibility=View.VISIBLE
         val order_id=RequestBody.create(MediaType.parse("text/plain"), order.order_id)
@@ -82,11 +97,10 @@ class OrderDetail : AppCompatActivity(),orderItemFunctions {
 
      fun invoice() {
         Toast.makeText(applicationContext,"please hold on for a moment. Don't press back button",Toast.LENGTH_LONG).show()
-         val invoiceData=InvoiceData().apply {
-             this.items=orderItems
-             this.order=order
-             this.user=MySharedStorage.getUserr()
-         }
+         val invoiceData=InvoiceData()
+         invoiceData.order=order
+         invoiceData.user=user
+         invoiceData.items=orderItems
          InvoiceGenerator(this,invoiceData)
     }
     fun confirm(){

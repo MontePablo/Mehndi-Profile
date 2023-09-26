@@ -2,8 +2,8 @@ package com.adretsoftwere.mehndinterior.daos
 
 object Constants{
 
-//    val apiUrl= "https://adef-103-121-156-102.ngrok-free.app/"
-    val apiUrl="https://api.mehndipvc.com/"
+//    val apiUrl= "https://3dd8-45-64-223-2.ngrok-free.app"+"/mehndi_profile/"
+    val apiUrl="https://montyapis.000webhostapp.com"+"/mehndi_profile/"
 
     val imageUrl="assets/"
 

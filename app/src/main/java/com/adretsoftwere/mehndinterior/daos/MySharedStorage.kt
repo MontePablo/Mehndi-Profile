@@ -19,7 +19,7 @@ object MySharedStorage {
     }
 
     fun getUserId(): String {
-        return  preference.getString("user_id", null)!!
+        return  preference.getString("user_id", "")!!
     }
     fun saveUser(user:User){
         this.user=user

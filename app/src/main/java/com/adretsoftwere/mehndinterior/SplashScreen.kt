@@ -18,7 +18,7 @@ class SplashScreen : AppCompatActivity() {
         MySharedStorage.func(applicationContext)
 
         Handler().postDelayed({
-            if(MySharedStorage.getUserId().isBlank())
+            if(MySharedStorage.getUserId().isNullOrBlank())
                 startActivity(Intent(applicationContext, Login::class.java))
             else
                 startActivity(Intent(applicationContext, MainActivity::class.java))

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -31,11 +32,16 @@ import java.io.FileOutputStream
 
 
 class InvoiceGenerator(activity: AppCompatActivity,data: InvoiceData) {
-    lateinit var orderId:String
-    lateinit var invoiceId:String
     lateinit var activity:AppCompatActivity
     lateinit var invoiceUri: Uri
     init {
+        Log.d("TAG","order.name:"+data.order.name)
+        Log.d("TAG","order.price:"+data.order.price)
+        Log.d("TAG","order.id:"+data.order.order_id)
+        Log.d("TAG","user.name:"+data.user.name)
+        Log.d("TAG","item.name:"+data.items[0].name)
+
+
         this.activity=activity
         val officeAddress ="MEHNDI PROFILE INDUSTRIES PVT. LTD.\nSiv Sai Puram, Badangpet, hyderabad, Telangana, 500058\nPhone no.: 9246272658\nEmail: info@mehndipvc.com\nGSTIN: 19AAQCM4236P1ZM\nState: 19-West Bengal"
 
